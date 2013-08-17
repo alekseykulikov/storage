@@ -1,6 +1,6 @@
 # Storage.js
 
-  Fast, compressed, sorted key-value storage on top of localStorage, or [LevelDB](https://code.google.com/p/leveldb/) on localStorage.
+  Fast, compressed, sorted key-value storage, or [LevelDB](https://code.google.com/p/leveldb/) on localStorage.
 
 ## Main features
 

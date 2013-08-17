@@ -1,0 +1,23 @@
+{
+  "name": "storage",
+  "repo": "ask11/storage",
+  "description": "Fast, compressed, sorted key-value storage. Or LevelDB on localStorage.",
+  "version": "0.1.0",
+  "keywords": [
+    "offline",
+    "leveldown",
+    "localStorage",
+    "LevelDB"
+  ],
+  "dependencies": {
+    "component/inherit": "*",
+    "ask11/node-abstract-leveldown": "0.9.0",
+    "padolsey/operative": "0.2.1"
+  },
+  "license": "MIT",
+  "main": "lib/index.js",
+  "scripts": [
+    "lib/index.js",
+    "lib/vendor/lz-string.js"
+  ]
+}
