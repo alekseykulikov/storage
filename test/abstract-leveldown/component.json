@@ -1,0 +1,16 @@
+{
+  "name": "abstract-leveldown",
+  "scripts": [
+    "abstract/approximate-size-test.js",
+    "abstract/batch-test.js",
+    "abstract/chained-batch-test.js",
+    "abstract/close-test.js",
+    "abstract/del-test.js",
+    "abstract/get-test.js",
+    "abstract/iterator-test.js",
+    "abstract/leveldown-test.js",
+    "abstract/open-test.js",
+    "abstract/put-get-del-test.js",
+    "abstract/put-test.js"
+  ]
+}
