@@ -19,6 +19,7 @@
   "main": "lib/index.js",
   "scripts": [
     "lib/index.js",
+    "lib/block-index.js",
     "lib/vendor/lz-string.js"
   ],
   "remotes": []
