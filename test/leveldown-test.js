@@ -5,6 +5,7 @@
 (function() {
   var tape       = window.tape;
   var Storage    = require('storage');
+  var testBuffer = require('ask11-node-abstract-leveldown/lib/buffer').strToBuffer('foo');
   var testCommon = {};
 
   function factory(location) {
@@ -24,9 +25,9 @@
   require('abstract-leveldown/abstract/open-test').all(factory, tape, testCommon);
   require('abstract-leveldown/abstract/close-test').close(factory, tape, testCommon);
   require('abstract-leveldown/abstract/put-test').all(factory, tape, testCommon);
-  // require('abstract-leveldown/abstract/del-test').all(factory, tape, testCommon);
-  // require('abstract-leveldown/abstract/get-test').all(factory, tape, testCommon);
-  // require('abstract-leveldown/abstract/put-get-del-test').all(factory, tape, testCommon, testBuffer);
+  require('abstract-leveldown/abstract/del-test').all(factory, tape, testCommon);
+  require('abstract-leveldown/abstract/get-test').all(factory, tape, testCommon);
+  require('abstract-leveldown/abstract/put-get-del-test').all(factory, tape, testCommon, testBuffer);
   // require('abstract-test-suite/abstract/batch-test').all(factory, tape, testCommon);
   // require('abstract-test-suite/abstract/chained-batch-test').all(factory, tape, testCommon);
   // require('abstract-test-suite/abstract/iterator-test').all(factory, tape, testCommon);
