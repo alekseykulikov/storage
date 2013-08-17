@@ -15,7 +15,7 @@
   "devDependencies": {
     "abstract-leveldown": "0.9.0",
     "component": "*",
-    "testem": "*",
+    "testem": "0.3.21",
     "tape": "*",
     "browserify": "*"
   },

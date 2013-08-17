@@ -12,12 +12,17 @@
   "dependencies": {
     "component/inherit": "*",
     "ask11/node-abstract-leveldown": "0.9.0",
-    "padolsey/operative": "0.2.1"
+    "padolsey/operative": "0.2.1",
+    "marcuswestin/store.js": "*",
+    "timoxley/next-tick": "*",
+    "avetisk/defaults": "*"
   },
   "license": "MIT",
   "main": "lib/index.js",
   "scripts": [
     "lib/index.js",
+    "lib/process.js",
     "lib/vendor/lz-string.js"
-  ]
+  ],
+  "remotes": []
 }

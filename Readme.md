@@ -17,14 +17,15 @@
 ## Example
 
 ```js
-var storage = require('storage');
+var Storage = require('storage');
+var books   = new Storage('books');
 
-storage.put(1, 'Effective Javascript', function(err) {});
-storage.put(2, 'Functional Javascript', function(err) {});
-storage.put(3, 'Javascript Good Parts', function(err) {});
+books.put(1, 'Effective Javascript', function(err) {});
+books.put(2, 'Functional Javascript', function(err) {});
+books.put(3, 'Javascript Good Parts', function(err) {});
 
 // get value by key
-storage.get(1, function(err, val) {}); // 'Effective Javascript'
+books.get(1, function(err, val) {}); // 'Effective Javascript'
 ```
 
 ## License
