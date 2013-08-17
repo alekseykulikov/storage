@@ -1,7 +1,7 @@
 {
   "name": "storage",
   "repo": "ask11/storage",
-  "description": "Fast, compressed, sorted key-value storage. Or LevelDB on localStorage.",
+  "description": "Fast, compressed, and sorted key-value storage, or LevelDB on localStorage.",
   "version": "0.1.0",
   "keywords": [
     "offline",
