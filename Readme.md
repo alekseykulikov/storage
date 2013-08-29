@@ -7,7 +7,6 @@
   * **data compression**. You can store 25-50mb of data, instead of 5mb limit, thanks [lz-string](https://github.com/pieroxy/lz-string);
   * **block structure**. Data stores in 20kb blocks sorted by key. It helps to write fast iterators and batches, and avoid localStorage performance problems;
   * **async API** `put`, `get`, `del`, `batch`, `forEach`. Real works happen in web-workers, thanks [operative](https://github.com/padolsey/operative);
-  * **IE6+ support**. It use time-tested [store.js](https://github.com/marcuswestin/store.js) as localStorage wrapper for all browsers without using cookies or flash.
 
 ## Installation
 

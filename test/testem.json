@@ -1,8 +1,8 @@
 {
   "before_tests": "npm run build",
   "test_page": "test/test-runner.html",
-  "launch_in_dev": ["phantomjs"],
   "launch_in_ci": ["phantomjs"],
+  "launch_in_dev": ["phantomjs"],
   "src_files": [
     "lib/*.js",
     "lib/vendor/*.js",
