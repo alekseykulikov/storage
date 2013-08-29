@@ -13,9 +13,8 @@
     "stat": "cloc lib/ --quiet --exclude-dir=vendor --by-file && cloc test/*.js --quiet --by-file"
   },
   "devDependencies": {
-    "abstract-leveldown": "0.9.0",
     "component": "*",
-    "testem": "0.3.21",
+    "testem": "*",
     "tape": "*",
     "browserify": "*"
   },

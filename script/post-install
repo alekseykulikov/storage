@@ -11,7 +11,5 @@ mkdir -p tmp
 # build local version of tape
 browserify ./node_modules/tape/index.js --standalone tape --outfile tmp/tape.js
 
-# build component version of abstract test suite
-cd test/abstract-leveldown
-component build --no-require --out ../../tmp --name abstract-test-suite
-cd ../..
+# build storage
+npm run build

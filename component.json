@@ -5,21 +5,20 @@
   "version": "0.1.0",
   "keywords": [
     "offline",
-    "leveldown",
+    "storage",
     "localStorage",
     "LevelDB"
   ],
   "dependencies": {
-    "ask11/node-abstract-leveldown": "*",
     "padolsey/operative": "*",
     "marcuswestin/store.js": "*",
-    "avetisk/defaults": "*"
+    "avetisk/defaults": "*",
+    "paulmillr/async-each": "*"
   },
   "license": "MIT",
   "main": "lib/index.js",
   "scripts": [
     "lib/index.js",
-    "lib/block-index.js",
     "lib/vendor/lz-string.js"
   ],
   "remotes": []
