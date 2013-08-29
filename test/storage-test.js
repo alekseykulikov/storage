@@ -2,6 +2,7 @@ describe('storage', function() {
   var expect  = window.chai.expect;
   var series  = window.async.series;
   var storage = require('storage');
+  var Promise = require('promise');
 
   beforeEach(function() {
     localStorage.clear();
@@ -24,13 +25,13 @@ describe('storage', function() {
     });
 
     it('#get values with different keys', function(done) {
-      series([
-        function(cb) { storage.get('key', cb); },
-        function(cb) { storage.get([1], cb); },
-        function(cb) { storage.get(['doom', 3, [1, 2]], cb); },
-        function(cb) { storage.get(null, cb); },
-        function(cb) { storage.get(1, cb); },
-      ], function(err, results) {
+      Promise.all(
+        storage.get('key'),
+        storage.get([1]),
+        storage.get(['doom', 3, [1, 2]]),
+        storage.get(null),
+        storage.get(1)
+      ).nodeify(function(err, results) {
         expect(results).length(5);
         expect(results).eql(['value', { name: 'object' }, false, undefined, true]);
         done(err);
@@ -49,6 +50,15 @@ describe('storage', function() {
         storage.get('key', function(err2, val) {
           expect(val).undefined;
           done(err || err2);
+        });
+      });
+    });
+
+    it('supports promises', function(done) {
+      storage.put('foo', 'bar').then(function() {
+        storage.get('foo').then(function(val) {
+          expect(val).equal('bar');
+          storage.del('foo').nodeify(done);
         });
       });
     });

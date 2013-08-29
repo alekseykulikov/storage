@@ -10,7 +10,8 @@
     "LevelDB"
   ],
   "dependencies": {
-    "padolsey/operative": "*"
+    "padolsey/operative": "*",
+    "then/promise": "*"
   },
   "license": "MIT",
   "main": "lib/index.js",
