@@ -1,13 +1,12 @@
 # Storage.js
 
-  Fast, compressed, sorted key-value storage, or [LevelDB](https://code.google.com/p/leveldb/) on localStorage.
+  Fast, compressed, async, and sorted key-value storage on top of localStorage.
 
 ## Main features
 
   * **data compression**. You can store 25-50mb of data, instead of 5mb limit, thanks [lz-string](https://github.com/pieroxy/lz-string);
   * **block structure**. Data stores in 20kb blocks sorted by key. It helps to write fast iterators and batches, and avoid localStorage performance problems;
-  * **simple async API** `put`, `get`, `del`, `batch`, `iterator`. Real works happen in web-workers, thanks [operative](https://github.com/padolsey/operative);
-  * **[levelDown](https://github.com/rvagg/node-leveldown/) compatibality**. It can be used as backend for [levelup](https://github.com/rvagg/node-levelup/) so you can extend storage with a long list of [modules](https://github.com/rvagg/node-levelup/wiki/Modules).
+  * **async API** `put`, `get`, `del`, `batch`, `forEach`. Real works happen in web-workers, thanks [operative](https://github.com/padolsey/operative);
   * **IE6+ support**. It use time-tested [store.js](https://github.com/marcuswestin/store.js) as localStorage wrapper for all browsers without using cookies or flash.
 
 ## Installation
@@ -17,15 +16,14 @@
 ## Example
 
 ```js
-var Storage = require('storage');
-var books   = new Storage('books');
+var storage = require('storage');
 
-books.put(1, 'Effective Javascript', function(err) {});
-books.put(2, 'Functional Javascript', function(err) {});
-books.put(3, 'Javascript Good Parts', function(err) {});
+storage.put(1, 'Effective Javascript', function(err) {});
+storage.put(2, 'Functional Javascript', function(err) {});
+storage.put(3, 'Javascript Good Parts', function(err) {});
 
 // get value by key
-books.get(1, function(err, val) {}); // 'Effective Javascript'
+storage.get(1, function(err, val) {}); // 'Effective Javascript'
 ```
 
 ## License
