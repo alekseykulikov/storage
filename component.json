@@ -10,10 +10,7 @@
     "LevelDB"
   ],
   "dependencies": {
-    "padolsey/operative": "*",
-    "marcuswestin/store.js": "*",
-    "avetisk/defaults": "*",
-    "paulmillr/async-each": "*"
+    "padolsey/operative": "*"
   },
   "license": "MIT",
   "main": "lib/index.js",

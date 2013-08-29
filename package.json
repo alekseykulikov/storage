@@ -6,20 +6,20 @@
   "author": "Aleksey Kulikov <alekseys.kulikov@gmail.com> (http://twitter.com/ask_11)",
   "license": "MIT",
   "scripts": {
-    "postinstall": "command -v component > /dev/null && ./script/post-install",
+    "postinstall": "command -v component > /dev/null && component install && npm run build",
     "test": "testem -f test/testem.json ci",
     "start": "testem -f test/testem.json",
-    "build": "component build --out tmp",
+    "build": "component build",
     "stat": "cloc lib/ --quiet --exclude-dir=vendor --by-file && cloc test/*.js --quiet --by-file"
   },
   "devDependencies": {
     "component": "*",
     "testem": "*",
-    "tape": "*",
-    "browserify": "*"
+    "async": "*",
+    "chai": "*"
   },
   "testling": {
-    "preprocess": "./script/post-install",
+    "preprocess": "npm run build",
     "html": "test/test-runner.html",
     "browsers": [
       "ie/6..latest",
