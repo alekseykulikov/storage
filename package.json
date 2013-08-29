@@ -9,7 +9,7 @@
     "postinstall": "command -v component > /dev/null && ./script/post-install",
     "test": "testem -f test/testem.json ci",
     "start": "testem -f test/testem.json",
-    "build": "component build",
+    "build": "component build --out tmp",
     "stat": "cloc lib/ --quiet --exclude-dir=vendor --by-file && cloc test/*.js --quiet --by-file"
   },
   "devDependencies": {
