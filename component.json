@@ -11,7 +11,11 @@
   ],
   "dependencies": {
     "padolsey/operative": "*",
-    "then/promise": "*"
+    "then/promise": "*",
+    "component/map": "*",
+    "component/type": "*",
+    "paulmillr/async-each": "*",
+    "component/each": "*"
   },
   "license": "MIT",
   "main": "lib/index.js",

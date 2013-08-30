@@ -62,5 +62,27 @@ describe('storage', function() {
         });
       });
     });
+
+    it('#batch many records', function(done) {
+      var date = new Date().toString();
+      var ops = [
+        { type: 'del', key: 'key' },
+        { type: 'put', key: [1], value: 'Keit' },
+        { type: 'put', key: 'date', value: date },
+        { type: 'del', key: 1 }
+      ];
+      storage.batch(ops, function(err) {
+        Promise.all(
+          storage.get('key'),
+          storage.get([1]),
+          storage.get(['doom', 3, [1, 2]]),
+          storage.get('date'),
+          storage.get(1)
+        ).nodeify(function(err2, results) {
+          expect(results).eql([undefined, 'Keit', false, date, undefined]);
+          done(err || err2);
+        });
+      });
+    });
   });
 });
