@@ -8,13 +8,12 @@ describe('storage', function() {
     localStorage.clear();
   });
 
-  describe('basic operations', function() {
+  describe('simple operations', function() {
     beforeEach(function(done) {
       series([
         function(cb) { storage.put('key', 'value', cb); },
         function(cb) { storage.put([1], { name: 'object' }, cb); },
         function(cb) { storage.put(['doom', 3, [1, 2]], false, cb); },
-        function(cb) { storage.put(null, undefined, cb); },
         function(cb) { storage.put(1, true, cb); },
       ], done);
     });
@@ -29,11 +28,10 @@ describe('storage', function() {
         storage.get('key'),
         storage.get([1]),
         storage.get(['doom', 3, [1, 2]]),
-        storage.get(null),
         storage.get(1)
       ).nodeify(function(err, results) {
-        expect(results).length(5);
-        expect(results).eql(['value', { name: 'object' }, false, undefined, true]);
+        expect(results).length(4);
+        expect(results).eql(['value', { name: 'object' }, false, true]);
         done(err);
       });
     });
@@ -43,7 +41,6 @@ describe('storage', function() {
         function(cb) { storage.del('key', cb); },
         function(cb) { storage.del([1], cb); },
         function(cb) { storage.del(['doom', 3, [1, 2]], cb); },
-        function(cb) { storage.del(null, cb); },
         function(cb) { storage.del(1, cb); },
       ], function(err) {
         expect(localStorage.getItem('.bkey')).equal('');
@@ -82,6 +79,14 @@ describe('storage', function() {
           expect(results).eql([undefined, 'Keit', false, date, undefined]);
           done(err || err2);
         });
+      });
+    });
+
+    it('#iterates values', function(done) {
+      var size = 0;
+      storage.forEach(function() { size++ }, function(err) {
+        expect(size).equal(4);
+        done(err);
       });
     });
   });
