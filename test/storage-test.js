@@ -1,15 +1,14 @@
+mocha.setup({ timeout: 5000 });
+
 describe('storage', function() {
   var expect  = window.chai.expect;
   var series  = window.async.series;
   var storage = require('storage');
   var Promise = require('promise');
 
-  beforeEach(function() {
-    localStorage.clear();
-  });
-
-  describe('simple operations', function() {
+  describe('simple operations - one block', function() {
     beforeEach(function(done) {
+      localStorage.clear();
       series([
         function(cb) { storage.put('key', 'value', cb); },
         function(cb) { storage.put([1], { name: 'object' }, cb); },
@@ -20,7 +19,7 @@ describe('storage', function() {
 
     it('sets .storage-keys', function() {
       expect(localStorage.getItem('.bkey')).exist;
-      expect(localStorage.getItem('.storage-keys'), '.bkey');
+      expect(localStorage.getItem('.storage-keys')).equal('key');
     });
 
     it('#get values with different keys', function(done) {
@@ -82,7 +81,7 @@ describe('storage', function() {
       });
     });
 
-    it('#iterates values', function(done) {
+    it('#forEach values', function(done) {
       var size = 0;
       storage.forEach(function() { size++ }, function(err) {
         expect(size).equal(4);
@@ -90,4 +89,41 @@ describe('storage', function() {
       });
     });
   });
+
+  describe('massive operations - many blocks', function() {
+    before(function(done) {
+      localStorage.clear();
+      var ops = [];
+      for (var i = 0; i < 100000; i++)
+        ops.push({ type: 'put', key: i, value: 'item' + i });
+      console.log('store: ' + size(ops) + ' of data.');
+      storage.batch(ops, done);
+    });
+
+    it('sets .storage-keys', function() {
+      expect(localStorage.getItem('.b0')).exist;
+      expect(localStorage.getItem('.storage-keys')).equal('0');
+      expect(size(localStorage)).equal('0.56Mb');
+    });
+
+    it('stores all data', function(done) {
+      var count = 0;
+      storage.forEach(function() { count++ }, function(err) {
+        expect(count).equal(100000);
+        done(err);
+      });
+    });
+
+    it('support #get', function(done) {
+      storage.get(50000).then(function(val) {
+        expect(val).equal('item50000');
+        done();
+      });
+    });
+  });
+
+  function size(obj) {
+    var len = JSON.stringify(obj).length * 2;
+    return (len / (1024*1024)).toFixed(2) + 'Mb';
+  }
 });
