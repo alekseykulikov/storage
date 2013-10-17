@@ -12,11 +12,8 @@
   ],
   "dependencies": {
     "padolsey/operative": "*",
-    "then/promise": "*",
     "component/map": "*",
-    "component/type": "*",
-    "paulmillr/async-each": "*",
-    "component/each": "*"
+    "paulmillr/async-each": "*"
   },
   "development": {
     "chaijs/chai": "*",
@@ -25,6 +22,9 @@
   "main": "lib/index.js",
   "scripts": [
     "lib/index.js",
+    "lib/blocks.js",
+    "lib/plugins/basic-operations.js",
+    "lib/plugins/batch.js",
     "lib/vendor/lz-string.js"
-  ],
+  ]
 }

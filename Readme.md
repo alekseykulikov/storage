@@ -27,13 +27,17 @@ storage.get(1, function(err, val) {}); // 'Effective Javascript'
 
 ## API
 
-  Each method gets optional callback or returns promise.
+  It support any type of key|val.
 
-### storage.put(key, val, [cb])
-### storage.get(key, [cb])
-### storage.del(key, [cb])
-### storage.batch(ops, [cb])
-### storage.forEach(fn, [cb])
+### storage.put(key, val, cb)
+### storage.get(key, cb)
+### storage.del(key, cb)
+### storage.all(cb)
+### storage.batch(ops, cb)
+
+## Blocks API
+
+### blocks.get(key, function(err, block) {})
 
 ## Development
 
