@@ -25,6 +25,23 @@ storage.put(3, 'Javascript Good Parts', function(err) {});
 storage.get(1, function(err, val) {}); // 'Effective Javascript'
 ```
 
+## API
+
+  Each method gets optional callback or returns promise.
+
+### storage.put(key, val, [cb])
+### storage.get(key, [cb])
+### storage.del(key, [cb])
+### storage.batch(ops, [cb])
+### storage.forEach(fn, [cb])
+
+## Development
+
+  Requires component && component-test installed globally (npm install -g component component-test).
+
+  * `component install --dev` - install dependencies
+  * `component test` - ensure that all tests pass
+
 ## License
 
   Aleksey Kulikov, [MIT](http://ask11.mit-license.org/).
