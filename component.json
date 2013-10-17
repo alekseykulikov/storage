@@ -3,6 +3,7 @@
   "repo": "ask11/storage",
   "description": "Fast, compressed, async, and sorted key-value storage on top of localStorage.",
   "version": "0.1.0",
+  "license": "MIT",
   "keywords": [
     "offline",
     "storage",
@@ -17,11 +18,13 @@
     "paulmillr/async-each": "*",
     "component/each": "*"
   },
-  "license": "MIT",
+  "development": {
+    "chaijs/chai": "*",
+    "caolan/async": "*"
+  },
   "main": "lib/index.js",
   "scripts": [
     "lib/index.js",
     "lib/vendor/lz-string.js"
   ],
-  "remotes": []
 }

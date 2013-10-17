@@ -1,8 +1,8 @@
-mocha.setup({ timeout: 5000 });
+window.mocha.setup({ timeout: 5000 });
 
 describe('storage', function() {
-  var expect  = window.chai.expect;
-  var series  = window.async.series;
+  var expect  = require('chai').expect;
+  var series  = require('async').series;
   var storage = require('storage');
   var Promise = require('promise');
 
