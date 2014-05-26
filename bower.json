@@ -1,0 +1,21 @@
+{
+  "name": "storage",
+  "description": "Functional wrapper aroung localForage",
+  "version": "0.1.0",
+  "keywords": [
+    "offline",
+    "storage",
+    "localForage"
+  ],
+  "ignore": [
+    "**/.*",
+    "Makefile",
+    "index.js",
+    "test/",
+    "component.json",
+    "package.json"
+  ],
+  "main": [
+    "storage.js"
+  ]
+}
