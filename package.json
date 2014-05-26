@@ -5,12 +5,16 @@
   "author": "Aleksey Kulikov <alekseys.kulikov@gmail.com> (http://twitter.com/ask_11)",
   "version": "0.1.0",
   "license": "MIT",
+  "main": "storage.js",
   "keywords": [
     "offline",
     "storage",
     "localForage",
     "browserify"
   ],
+  "scripts": {
+    "test": "make test"
+  },
   "dependencies": {
     "localforage": "0.8.1",
     "component-type": "1.0.0",
@@ -18,8 +22,6 @@
   },
   "devDependencies": {
     "component": "1.0.0-rc5",
-    "component-testem": "0.9.0",
-    "mocha": "*",
-    "chai": "*"
+    "component-testem": "0.9.0"
   }
 }

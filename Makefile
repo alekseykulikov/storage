@@ -1,4 +1,3 @@
-mocha = ./node_modules/.bin/mocha
 component = ./node_modules/.bin/component
 component-testem = ./node_modules/.bin/component-testem
 
@@ -15,7 +14,6 @@ clean:
 
 test: install $(wildcard test/*.js)
 	@$(component-testem)
-	@$(mocha) test/storage.js -R spec
 
 test-server:
 	@$(component-testem) --server
