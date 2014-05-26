@@ -1,7 +1,7 @@
 {
   "name": "storage",
   "repository": "ask11/storage",
-  "description": "Functional wrapper aroung localForage",
+  "description": "Functional wrapper around localForage",
   "version": "0.1.0",
   "license": "MIT",
   "keywords": [
