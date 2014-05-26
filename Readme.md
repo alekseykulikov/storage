@@ -1,6 +1,13 @@
 # Storage.js
 
+  Functional wrapper aroung localForage
+  Async interface to `localForage` as one function with node-callback support.
+  Inpired by https://github.com/yields/store
 
+  причины создания:
+  - мне не нравился странный callback синтаксис в localForage
+  - мне нужен был batch support
+  - хотелось упростить api работы с хранилищем до одной функции
 
 ## Installation
 
@@ -16,6 +23,7 @@ npm install ask11-storage
 
 ```html
 <script src="storage.js"></script>
+<script>window.storage('key', fn);</script>
 ```
 
 ## Example
@@ -42,6 +50,12 @@ storage(['key1', 'key2', 'key3'], null, function(err) {});
 ### storage({ key1: val1, key2: val2, key3: val3 }, fn)
 ### storage(key, null, fn)
 ### storage([key1, key2, ..., keyn], null, fn)
+### storage(null, fn);
+### storage.forage
+### storage.get
+### storage.set
+### storage.del
+### storage.clear
 
 ## License
 

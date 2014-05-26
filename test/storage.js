@@ -1,5 +1,5 @@
 var expect = require('chai').expect;
-var storage = require('./index');
+var storage = require('../index');
 
 describe('storage', function() {
   before(function() {
@@ -7,7 +7,7 @@ describe('storage', function() {
   });
 
   beforeEach(function(done) {
-    storage.clear(function(err) {
+    storage(null, function(err) {
       if (err) return done(err);
       storage({
         foo: 7,

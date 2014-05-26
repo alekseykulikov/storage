@@ -1,6 +1,6 @@
 {
   "name": "storage",
-  "repo": "ask11/storage",
+  "repository": "ask11/storage",
   "description": "Functional wrapper aroung localForage",
   "version": "0.1.0",
   "license": "MIT",
@@ -22,7 +22,7 @@
       "chaijs/chai": "*"
     },
     "scripts": [
-      "test.js"
+      "test/storage.js"
     ]
   }
 }
