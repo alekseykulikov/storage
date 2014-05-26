@@ -1,50 +1,47 @@
 # Storage.js
 
-  Fast, compressed, async, and sorted key-value storage on top of localStorage.
 
-## Main features
-
-  * **data compression**. You can store 25-50mb of data, instead of 5mb limit, thanks [lz-string](https://github.com/pieroxy/lz-string);
-  * **block structure**. Data stores in 20kb blocks sorted by key. It helps to write fast iterators and batches, and avoid localStorage performance problems;
-  * **async API** `put`, `get`, `del`, `batch`, `forEach`. Real works happen in web-workers, thanks [operative](https://github.com/padolsey/operative);
 
 ## Installation
 
-    $ component install ask11/storage
+  It supports 3 package managers:
+
+```
+bower install storage
+component install ask11/storage
+npm install ask11-storage
+```
+
+  [Standalone build](https://github.com/ask11/storage/blob/master/storage.js) available as well.
+
+```html
+<script src="storage.js"></script>
+```
 
 ## Example
 
 ```js
-var storage = require('storage');
+// set
+storage('key', 'val', function(err) {});
+storage({ key: 'foo', key2: 'val2'}, , function(err) {});
 
-storage.put(1, 'Effective Javascript', function(err) {});
-storage.put(2, 'Functional Javascript', function(err) {});
-storage.put(3, 'Javascript Good Parts', function(err) {});
+// get
+storage('key', function(err, val) {});
+storage(['key', 'key2'], function(err, all) {}); // all.length == 2
 
-// get value by key
-storage.get(1, function(err, val) {}); // 'Effective Javascript'
+// delete
+storage('key', null, function(err) {});
+storage(['key1', 'key2', 'key3'], null, function(err) {});
 ```
 
 ## API
 
-  It support any type of key|val.
-
-### storage.put(key, val, cb)
-### storage.get(key, cb)
-### storage.del(key, cb)
-### storage.all(cb)
-### storage.batch(ops, cb)
-
-## Blocks API
-
-### blocks.get(key, function(err, block) {})
-
-## Development
-
-  Requires component && component-test installed globally (npm install -g component component-test).
-
-  * `component install --dev` - install dependencies
-  * `component test` - ensure that all tests pass
+### storage(key, fn)
+### storage([key1, key2, ..., keyn], fn)
+### storage(key, val, fn)
+### storage({ key1: val1, key2: val2, key3: val3 }, fn)
+### storage(key, null, fn)
+### storage([key1, key2, ..., keyn], null, fn)
 
 ## License
 
