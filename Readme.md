@@ -1,25 +1,24 @@
-# Storage.js
+# Storage [![Build Status](https://travis-ci.org/ask11/storage.png?branch=master)](https://travis-ci.org/ask11/storage)
 
-  Functional wrapper aroung localForage
-  Async interface to `localForage` as one function with node-callback support.
-  Inpired by https://github.com/yields/store
+  Storage is a functional wrapper around [localForage](https://github.com/mozilla/localForage).
+  It means, it's an asynchronous browser storage with multiple back-ends (IndexedDB, WebSQL, localStorage)
+  for better offline experience.
 
-  причины создания:
-  - мне не нравился странный callback синтаксис в localForage
-  - мне нужен был batch support
-  - хотелось упростить api работы с хранилищем до одной функции
+  The main differences with localForage:
+
+  - error first node-style callbacks, [see #55](https://github.com/mozilla/localForage/issues/55)
+  - batch support
+  - simple API inspired by [yields/store](https://github.com/yields/store)
 
 ## Installation
 
-  It supports 3 package managers:
-
 ```
-bower install storage
-component install ask11/storage
-npm install ask11-storage
+$ bower install storage
+$ component install ask11/storage
+$ npm install ask11-storage --save
 ```
 
-  [Standalone build](https://github.com/ask11/storage/blob/master/storage.js) available as well.
+  Standalone build available as [storage.js](https://github.com/ask11/storage/blob/master/storage.js).
 
 ```html
 <script src="storage.js"></script>
@@ -45,17 +44,81 @@ storage(['key1', 'key2', 'key3'], null, function(err) {});
 ## API
 
 ### storage(key, fn)
+
+  Get `key` value.
+
 ### storage([key1, key2, ..., keyn], fn)
+
+  Get group of values. Callbacks return array of values for each key.
+  If key not exists, it returns undefined for this position.
+
 ### storage(key, val, fn)
+
+  Set `key` to `val`. You can store any kind of data, including [blobs](https://hacks.mozilla.org/2014/02/localforage-offline-storage-improved/).
+
 ### storage({ key1: val1, key2: val2, key3: val3 }, fn)
+
+  Run batch operation.
+  Simple way to create, update, remove multiple records.
+
+```js
+// assume we have 2 records
+storage('foo', 7, fn)
+storage('bar', ['one', 'two', 'three'], fn);
+
+storage({
+  foo: 10, // update value of `foo`
+  bar: null, // remove `bar`
+  baz: 'val' // add new val
+}, function(err) {});
+```
+
 ### storage(key, null, fn)
+
+  Delete `key`. Null semantic is inspired by [yields/store](https://github.com/yields/store) and [component/cookie](https://github.com/component/cookie).
+  Set `null` does not have another sense as delete my value.
+
 ### storage([key1, key2, ..., keyn], null, fn)
-### storage(null, fn);
+
+  Delete group of keys in one request.
+
 ### storage.forage
-### storage.get
-### storage.set
-### storage.del
-### storage.clear
+
+  It gives you access, to localForage instance.
+  You can use it for detailed backend configuration.
+
+```js
+storage.forage.config({ name: 'my-name' });
+if (!window.indexedDB) storage.forage.setDriver('localStorageWrapper');
+```
+
+### .clear
+
+  Clear storage, useful for test environment.
+
+### .get, .set, .del
+
+  If you prefer more explicit API and worrying about messing with `null` and
+  incidentally delete of your key, you can use exposed functions.
+
+```js
+storage.set('key', 'val', function(err) {});
+storage.get('key', function(err, val) {}); // val
+storage.del('key', function(err) {});
+```
+
+## Promises
+
+  If you don't like callbacks,
+  you can use storage together with awesome [then/promise](https://github.com/then/promise).
+
+```js
+var Promise = require('promise');
+var orignal = require('storage');
+var storage = Promise.denodeify(orignal);
+
+storage('key').then(function(val) {});
+```
 
 ## License
 
