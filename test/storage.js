@@ -7,7 +7,7 @@ describe('storage', function() {
   });
 
   beforeEach(function(done) {
-    storage(null, function(err) {
+    storage.clear(function(err) {
       if (err) return done(err);
       storage({
         foo: 7,
@@ -56,6 +56,21 @@ describe('storage', function() {
       storage(['foo', 'bar'], function(err2, res) {
         expect(res[0]).not.exist;
         expect(res[1]).not.exist;
+        done(err || err2);
+      });
+    });
+  });
+
+  it('batch update', function(done) {
+    storage({
+      foo: 10,
+      bar: null,
+      key: 'val'
+    }, function(err) {
+      storage(['foo', 'bar', 'key'], function(err2, res) {
+        expect(res[0]).equal(10);
+        expect(res[1]).not.exist;
+        expect(res[2]).equal('val');
         done(err || err2);
       });
     });
