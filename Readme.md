@@ -50,11 +50,12 @@ storage(['key1', 'key2', 'key3'], null, function(err) {});
 ### storage([key1, key2, ..., keyn], fn)
 
   Get group of values. Callbacks return array of values for each key.
-  If key not exists, it returns undefined for this position.
+  If key does not exist, it returns undefined for this position.
 
 ### storage(key, val, fn)
 
-  Set `key` to `val`. You can store any kind of data, including [blobs](https://hacks.mozilla.org/2014/02/localforage-offline-storage-improved/).
+  Set `key` to `val`.
+  You can store any kind of data, including [blobs](https://hacks.mozilla.org/2014/02/localforage-offline-storage-improved/).
 
 ### storage({ key1: val1, key2: val2, key3: val3 }, fn)
 
@@ -67,9 +68,9 @@ storage('foo', 7, fn)
 storage('bar', ['one', 'two', 'three'], fn);
 
 storage({
-  foo: 10, // update value of `foo`
+  baz: 'val' // create new val
+  foo: 1000, // update `foo` value
   bar: null, // remove `bar`
-  baz: 'val' // add new val
 }, function(err) {});
 ```
 
@@ -85,7 +86,7 @@ storage({
 ### storage.forage
 
   It gives you access, to localForage instance.
-  You can use it for detailed backend configuration.
+  You can use it to configure backend.
 
 ```js
 storage.forage.config({ name: 'my-name' });
@@ -94,12 +95,11 @@ if (!window.indexedDB) storage.forage.setDriver('localStorageWrapper');
 
 ### .clear
 
-  Clear storage, useful for test environment.
+  Clear storage.
 
 ### .get, .set, .del
 
-  If you prefer more explicit API and worrying about messing with `null` and
-  incidentally delete of your key, you can use exposed functions.
+  If you prefer more explicit API, you can use exposed functions.
 
 ```js
 storage.set('key', 'val', function(err) {});
@@ -109,8 +109,8 @@ storage.del('key', function(err) {});
 
 ## Promises
 
-  If you don't like callbacks,
-  you can use storage together with awesome [then/promise](https://github.com/then/promise).
+  If you don't like callbacks, and prefer promises,
+  you can use storage together with [then/promise](https://github.com/then/promise).
 
 ```js
 var Promise = require('promise');
