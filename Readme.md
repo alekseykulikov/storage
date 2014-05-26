@@ -1,8 +1,8 @@
 # Storage [![Build Status](https://travis-ci.org/ask11/storage.png?branch=master)](https://travis-ci.org/ask11/storage)
 
   Storage is a functional wrapper around [localForage](https://github.com/mozilla/localForage).
-  It means, it's an asynchronous browser storage with multiple back-ends (IndexedDB, WebSQL, localStorage)
-  for better offline experience.
+  It means, it's an asynchronous browser storage with multiple back-ends (IndexedDB, WebSQL, localStorage),
+  builded for better offline experience.
 
   The main differences with localForage:
 
@@ -57,6 +57,11 @@ storage(['key1', 'key2', 'key3'], null, function(err) {});
   Set `key` to `val`.
   You can store any kind of data, including [blobs](https://hacks.mozilla.org/2014/02/localforage-offline-storage-improved/).
 
+### storage(key, null, fn)
+
+  Delete `key`. Null semantic is inspired by [yields/store](https://github.com/yields/store) and [component/cookie](https://github.com/component/cookie).
+  Set `null` does not have another sense as delete my value.
+
 ### storage({ key1: val1, key2: val2, key3: val3 }, fn)
 
   Run batch operation.
@@ -73,11 +78,6 @@ storage({
   bar: null, // remove `bar`
 }, function(err) {});
 ```
-
-### storage(key, null, fn)
-
-  Delete `key`. Null semantic is inspired by [yields/store](https://github.com/yields/store) and [component/cookie](https://github.com/component/cookie).
-  Set `null` does not have another sense as delete my value.
 
 ### storage([key1, key2, ..., keyn], null, fn)
 
