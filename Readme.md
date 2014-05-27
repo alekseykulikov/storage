@@ -2,7 +2,7 @@
 
   Storage is a functional wrapper around [localForage](https://github.com/mozilla/localForage).
   That means it's an asynchronous browser storage with multiple back-ends (IndexedDB, WebSQL, localStorage),
-  which is built for *better offline experience*.
+  which is built for a better offline experience.
 
   The main differences with localForage:
 
