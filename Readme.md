@@ -1,13 +1,13 @@
 # Storage [![Build Status](https://travis-ci.org/ask11/storage.png?branch=master)](https://travis-ci.org/ask11/storage)
 
   Storage is a functional wrapper around [localForage](https://github.com/mozilla/localForage).
-  It means, it's an asynchronous browser storage with multiple back-ends (IndexedDB, WebSQL, localStorage),
-  which is builded for better offline experience.
+  That means it's an asynchronous browser storage with multiple back-ends (IndexedDB, WebSQL, localStorage),
+  which is built for *better offline experience*.
 
   The main differences with localForage:
 
   - batch support
-  - error first node-style callbacks, [fix #55](https://github.com/mozilla/localForage/issues/55)
+  - error first node-style callbacks, [fixes #55](https://github.com/mozilla/localForage/issues/55)
   - simple API inspired by [yields/store](https://github.com/yields/store)
 
 ## Installation
@@ -64,7 +64,7 @@ storage(['key1', 'key2', 'key3'], null, function(err) {});
 
 ### storage({ key1: val1, key2: val2, key3: val3 }, fn)
 
-  Run batch operation.
+  Run a batch operation.
   Simple way to create, update, remove multiple records.
 
 ```js
@@ -81,11 +81,11 @@ storage({
 
 ### storage([key1, key2, ..., keyn], null, fn)
 
-  Delete group of keys in one request.
+  Delete a group of keys in one request.
 
 ### storage.forage
 
-  It gives you access, to localForage instance.
+  It gives you access to the localForage instance.
   You can use it to configure backend.
 
 ```js
