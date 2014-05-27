@@ -2,12 +2,12 @@
 
   Storage is a functional wrapper around [localForage](https://github.com/mozilla/localForage).
   It means, it's an asynchronous browser storage with multiple back-ends (IndexedDB, WebSQL, localStorage),
-  builded for better offline experience.
+  which is builded for better offline experience.
 
   The main differences with localForage:
 
-  - error first node-style callbacks, [see #55](https://github.com/mozilla/localForage/issues/55)
   - batch support
+  - error first node-style callbacks, [fix #55](https://github.com/mozilla/localForage/issues/55)
   - simple API inspired by [yields/store](https://github.com/yields/store)
 
 ## Installation
@@ -30,7 +30,7 @@ $ npm install ask11-storage --save
 ```js
 // set
 storage('key', 'val', function(err) {});
-storage({ key: 'foo', key2: 'val2'}, , function(err) {});
+storage({ key: 'foo', key2: 'val2'}, function(err) {});
 
 // get
 storage('key', function(err, val) {});
@@ -93,11 +93,11 @@ storage.forage.config({ name: 'my-name' });
 if (!window.indexedDB) storage.forage.setDriver('localStorageWrapper');
 ```
 
-### .clear
+### storage.clear
 
   Clear storage.
 
-### .get, .set, .del
+### .get .set .del
 
   If you prefer more explicit API, you can use exposed functions.
 
@@ -109,8 +109,8 @@ storage.del('key', function(err) {});
 
 ## Promises
 
-  If you don't like callbacks, and prefer promises,
-  you can use storage together with [then/promise](https://github.com/then/promise).
+  If you don't like callbacks,
+  you can combine storage with [then/promise](https://github.com/then/promise).
 
 ```js
 var Promise = require('promise');
