@@ -60,7 +60,7 @@ storage(['key1', 'key2', 'key3'], null, function(err) {});
 ### storage(key, null, fn)
 
   Delete `key`. Null semantic is inspired by [yields/store](https://github.com/yields/store) and [component/cookie](https://github.com/component/cookie).
-  Set `null` does not have another sense as delete my value.
+  Setting a key to `null` is equivalent to  deleting the key via `storage.del(key)`.
 
 ### storage({ key1: val1, key2: val2, key3: val3 }, fn)
 
