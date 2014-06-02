@@ -1964,7 +1964,7 @@ function storage(key, val, cb) {
       : set(key, val, cb);
     case 2: return type(key) == 'object'
       ? set(key, val)
-      : key === null ? clear(val) : get(key, val);
+      : get(key, val);
     default:
       throw new TypeError('Not valid arguments length');
   }
@@ -1978,6 +1978,7 @@ storage.forage = localForage;
 storage.get = get;
 storage.set = set;
 storage.del = del;
+storage.count = count;
 storage.clear = clear;
 
 /**
@@ -2030,6 +2031,16 @@ function del(key, cb) {
 
 function clear(cb) {
   localForage.clear().then(wrap(cb), cb);
+}
+
+/**
+ * Get records count.
+ *
+ * @param {Functionc} cb
+ */
+
+function count(cb) {
+  localForage.length().then(wrap(cb), cb);
 }
 
 /**
