@@ -23,7 +23,7 @@ function storage(key, val, cb) {
       : set(key, val, cb);
     case 2: return type(key) == 'object'
       ? set(key, val)
-      : key === null ? clear(val) : get(key, val);
+      : get(key, val);
     default:
       throw new TypeError('Not valid arguments length');
   }
