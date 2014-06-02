@@ -61,6 +61,13 @@ describe('storage', function() {
     });
   });
 
+  it('#count', function(done) {
+    storage.count(function(err, count) {
+      expect(count).equal(3);
+      done(err);
+    });
+  });
+
   it('batch update', function(done) {
     storage({
       foo: 10,
@@ -76,11 +83,12 @@ describe('storage', function() {
     });
   });
 
-  it('expose 4 methods', function() {
+  it('expose 5 methods', function() {
     expect(storage.clear).exist;
     expect(storage.set).exist;
     expect(storage.get).exist;
     expect(storage.del).exist;
+    expect(storage.count).exist;
   });
 
   it('validates argument length', function() {

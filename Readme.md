@@ -97,6 +97,10 @@ if (!window.indexedDB) storage.forage.setDriver('localStorageWrapper');
 
   Clear storage.
 
+### storage.count
+
+  Get the number of records in storage.
+
 ### .get .set .del
 
   If you prefer more explicit API, you can use exposed functions.
