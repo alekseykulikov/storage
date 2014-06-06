@@ -57,8 +57,10 @@ storage.clear = clear;
 
 function get(key, cb) {
   type(key) != 'array'
-    ? localForage.getItem(key).then(wrap(cb, true), cb)
-    : asyncEach(key, get, cb);
+    ? localForage.getItem(key).then(wrapSuccess(cb, true), wrapError(cb))
+    : asyncEach(key, get, function(err, res) {
+        !err ? wrapSuccess(cb, true)(res) : wrapError(cb)(err);
+      });
 }
 
 /**
@@ -71,7 +73,7 @@ function get(key, cb) {
 
 function set(key, val, cb) {
   type(key) != 'object'
-    ? localForage.setItem(key, val).then(wrap(cb), cb)
+    ? localForage.setItem(key, val).then(wrapSuccess(cb), wrapError(cb))
     : asyncEach(Object.keys(key), function(subkey, next) {
         set(subkey, key[subkey], next);
       }, val);
@@ -86,7 +88,7 @@ function set(key, val, cb) {
 
 function del(key, cb) {
   type(key) != 'array'
-    ? localForage.removeItem(key).then(wrap(cb), cb)
+    ? localForage.removeItem(key).then(wrapSuccess(cb), wrapError(cb))
     : asyncEach(key, del, cb);
 }
 
@@ -97,17 +99,17 @@ function del(key, cb) {
  */
 
 function clear(cb) {
-  localForage.clear().then(wrap(cb), cb);
+  localForage.clear().then(wrapSuccess(cb), wrapError(cb));
 }
 
 /**
- * Get records count.
+ * Count records.
  *
  * @param {Functionc} cb
  */
 
 function count(cb) {
-  localForage.length().then(wrap(cb, true), cb);
+  localForage.length().then(wrapSuccess(cb, true), wrapError(cb));
 }
 
 /**
@@ -116,13 +118,26 @@ function count(cb) {
  *
  * @param {Function} cb
  * @param {Boolean} [hasResult]
- * @return {Function} cb
+ * @return {Function}
  */
 
-function wrap(cb, hasResult) {
+function wrapSuccess(cb, hasResult) {
   return function(res) {
-    hasResult
-      ? type(cb) == 'function' ? cb(null, res) : console.log(res)
-      : cb();
+    if (hasResult) type(cb) == 'function' ? cb(null, res) : console.log(res);
+    else if (type(cb) == 'function') cb();
+  };
+}
+
+/**
+ * Wrap error callback, and throw err, when it's missing.
+ *
+ * @param {Function} cb
+ * @return {Function}
+ */
+
+function wrapError(cb) {
+  return function(err) {
+    if (type(cb) == 'function') cb(err);
+    else throw err;
   };
 }
