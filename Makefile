@@ -24,3 +24,6 @@ release:
 stat:
 	@cloc index.js --quiet --by-file
 	@cloc test/ --quiet --by-file
+
+stat-components: components
+	@cloc components/ --by-file --exclude-dir=components/chaijs
