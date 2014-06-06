@@ -57,7 +57,7 @@ storage.clear = clear;
 
 function get(key, cb) {
   type(key) != 'array'
-    ? localForage.getItem(key).then(wrap(cb), cb)
+    ? localForage.getItem(key).then(wrap(cb, true), cb)
     : asyncEach(key, get, cb);
 }
 
@@ -107,16 +107,21 @@ function clear(cb) {
  */
 
 function count(cb) {
-  localForage.length().then(wrap(cb), cb);
+  localForage.length().then(wrap(cb, true), cb);
 }
 
 /**
  * Wrap promise style response to callback style.
  *
  * @param {Function} cb
+ * @param {Boolean} [hasResult]
  * @return {Function} cb
  */
 
-function wrap(cb) {
-  return function(res) { cb(null, res) };
+function wrap(cb, hasResult) {
+  return function(res) {
+    hasResult
+      ? cb(null, res)
+      : cb();
+  };
 }
