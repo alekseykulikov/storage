@@ -49,7 +49,7 @@ storage.del(['foo', 'bar', 'baz']);
 
 ### storage()
 
-  Main function is facade to get/set/del/count methods, inspired by [yields/store](https://github.com/yields/store).
+  Main function is facade to get/set/del/count methods. It's inspired by [yields/store](https://github.com/yields/store).
   Setting a key to `null` is equivalent to deleting the key via `storage.del(key)`.
 
 ```js
@@ -61,7 +61,7 @@ storage('key', function(err, val) {});
 storage(['key', 'key2'], function(err, all) {}); // all.length == 2
 
 // count
-storage(); // 2
+storage(function(err, count) {}); // count == 2
 
 // delete
 storage('key', null, function(err) {});
@@ -75,7 +75,7 @@ storage(['key', 'key2'], null, function(err) {});
 ### storage.get([key1, key2, ..., keyn], [fn])
 
   Get group of values. Callbacks return array of values for each key.
-  If key does not exist, it returns `null` for this position.
+  If key does not exist, it returns `null` on this position.
 
 ### storage.set(key, val, [fn])
 
