@@ -25,7 +25,10 @@ module.exports = storage;
  */
 
 function storage(key, val, cb) {
-  switch (arguments.length) {
+  var length = arguments.length;
+  if (type(arguments[length - 1]) != 'function') length += 1;
+
+  switch (length) {
     case 3: return val === null
       ? del(key, cb)
       : set(key, val, cb);
