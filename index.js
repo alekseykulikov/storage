@@ -50,6 +50,7 @@ storage.set = set;
 storage.del = del;
 storage.count = count;
 storage.clear = clear;
+storage.development = false;
 
 /**
  * Get `key`.
@@ -134,7 +135,7 @@ function wrap(cb, hasResult) {
   return function(res) {
     if (type(cb) == 'function') {
       hasResult ? cb(null, res) : cb();
-    } else if (hasResult) {
+    } else if (hasResult && storage.development) {
       console.log(res);
     }
     return res;
