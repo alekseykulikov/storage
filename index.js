@@ -61,7 +61,7 @@ storage.clear = clear;
 function get(key, cb) {
   return type(key) != 'array'
     ? localForage.getItem(key).then(wrap(cb, true), cb)
-    : asyncEach(key, getSubkey, cb);
+    : Promise.all(key.map(getSubkey)).then(wrap(cb, true), cb);
 
   function getSubkey(key) {
     return get(key, function() {}); // noob function to prevent logs
@@ -79,7 +79,7 @@ function get(key, cb) {
 function set(key, val, cb) {
   return type(key) != 'object'
     ? localForage.setItem(key, val).then(wrap(cb), cb)
-    : asyncEach(Object.keys(key), setSubkey, val);
+    : Promise.all(Object.keys(key).map(setSubkey)).then(wrap(val), val);
 
   function setSubkey(subkey, next) {
     return set(subkey, key[subkey], next);
@@ -96,7 +96,7 @@ function set(key, val, cb) {
 function del(key, cb) {
   return type(key) != 'array'
     ? localForage.removeItem(key).then(wrap(cb), cb)
-    : asyncEach(key, del, cb);
+    : Promise.all(key.map(del)).then(wrap(cb), cb);
 }
 
 /**
@@ -137,16 +137,4 @@ function wrap(cb, hasResult) {
     }
     return res;
   };
-}
-
-/**
- * Async parallel each with promises.
- *
- * @param {Array} array
- * @param {Function} next
- * @param {Function} cb
- */
-
-function asyncEach(array, next, cb) {
-  return Promise.all(array.map(next)).then(wrap(cb, true), cb);
 }
