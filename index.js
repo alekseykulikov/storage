@@ -36,7 +36,7 @@ function storage(key, val, cb) {
       ? set(key, val)
       : get(key, val);
     default:
-      throw new TypeError('Not valid arguments length');
+      return count(key);
   }
 }
 
