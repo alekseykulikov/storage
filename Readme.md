@@ -9,7 +9,8 @@
   - batch support
   - error first node-style callbacks, [fixes #55](https://github.com/mozilla/localForage/issues/55)
   - simple API inspired by [yields/store](https://github.com/yields/store)
-  - optional callbacks
+  - optional callbacks, return promises
+  - development mode
 
 ## Installation
 
@@ -30,56 +31,66 @@ $ npm install ask11-storage --save
 
 ```js
 // set
-storage('key', 'val', function(err) {});
-storage({ key: 'foo', key2: 'val2'}, function(err) {});
+storage.set('foo', 'val');
+storage.set({ foo: 'val', bar: 'baz' });
+
+// get
+storage.get('foo'); // 'val'
+storage.get(['foo', 'bar']); // ['val', 'baz']
+
+// delete
+storage.del('foo')
+storage.del(['foo', 'bar', 'baz']);
+```
+
+## API
+
+  Each method returns promise, and accepts optional callback.
+
+### storage()
+
+  Main function is facade to get/set/del/count methods, inspired by [yields/store](https://github.com/yields/store).
+  Setting a key to `null` is equivalent to deleting the key via `storage.del(key)`.
+
+```js
+// set
+storage({ key: 'val', key2: 'val2'}, function(err) {});
 
 // get
 storage('key', function(err, val) {});
 storage(['key', 'key2'], function(err, all) {}); // all.length == 2
 
+// count
+storage(); // 2
+
 // delete
 storage('key', null, function(err) {});
-storage(['key1', 'key2', 'key3'], null, function(err) {});
+storage(['key', 'key2'], null, function(err) {});
 ```
 
-  Working with async storage in developer console can be a problem.
-  For this case, storage provides optional callbacks, and console.log(value) when needed.
-
-```js
-storage.set('foo', 1);
-storage.set('bar', 2);
-storage.get(['foo', 'bar']);
-// => [1 ,2]
-storage.del('bar');
-storage.count();
-// => 1
-```
-
-## API
-
-### storage(key, fn)
+### storage.get(key, [fn])
 
   Get `key` value.
 
-### storage([key1, key2, ..., keyn], fn)
+### storage.get([key1, key2, ..., keyn], [fn])
 
   Get group of values. Callbacks return array of values for each key.
-  If key does not exist, it returns undefined for this position.
+  If key does not exist, it returns `null` for this position.
 
-### storage(key, val, fn)
+### storage.set(key, val, [fn])
 
   Set `key` to `val`.
   You can store any kind of data, including [blobs](https://hacks.mozilla.org/2014/02/localforage-offline-storage-improved/).
 
-### storage(key, null, fn)
+### storage.del(key, [fn])
 
-  Delete `key`. Null semantic is inspired by [yields/store](https://github.com/yields/store) and [component/cookie](https://github.com/component/cookie).
-  Setting a key to `null` is equivalent to  deleting the key via `storage.del(key)`.
+  Delete `key`.
 
-### storage({ key1: val1, key2: val2, key3: val3 }, fn)
+### storage.set({ key1: val1, key2: val2, key3: val3 }, [fn])
 
   Run a batch operation.
   Simple way to create, update, remove multiple records.
+  Use `null` to remove record.
 
 ```js
 // assume we have 2 records
@@ -93,19 +104,9 @@ storage({
 }, function(err) {});
 ```
 
-### storage([key1, key2, ..., keyn], null, fn)
+### storage.del([key1, key2, ..., keyn], [fn])
 
   Delete a group of keys in one request.
-
-### storage.forage
-
-  It gives you access to the localForage instance.
-  You can use it to configure backend.
-
-```js
-storage.forage.config({ name: 'my-name' });
-if (!window.indexedDB) storage.forage.setDriver('localStorageWrapper');
-```
 
 ### storage.clear()
 
@@ -113,30 +114,33 @@ if (!window.indexedDB) storage.forage.setDriver('localStorageWrapper');
 
 ### storage.count()
 
-  Get the number of records in storage.
+  Count records.
 
-### .get() .set() .del()
+### storage.development
 
-  If you prefer more explicit API, you can use exposed functions.
-  They methods allow optional callbacks.
+  Work with async storage in developer console can be unpleasant.
+  Setup development flag and storage will console.log() results of `get` or `count`.
 
 ```js
-storage.set('key', 'val', function(err) {});
-storage.get('key'); // val
-storage.del('key');
+storage.development = true;
+storage.set({ foo: 1, bar: 2 });
+storage.get(['foo', 'bar']);
+// => [1 ,2]
+storage.del('bar');
+storage.count();
+// => 1
+// shortcut to: storage.count().then(console.log.bind(console));
 ```
 
-## Promises
+### storage.forage
 
-  If you don't like callbacks,
-  you can combine storage with [then/promise](https://github.com/then/promise).
+  It gives you access to the localForage instance.
+  You can use it to configure backend.
+  By default storage setups only `name` option as `storage`.
 
 ```js
-var Promise = require('promise');
-var orignal = require('storage');
-var storage = Promise.denodeify(orignal);
-
-storage('key').then(function(val) {});
+storage.forage.config({ name: 'my-name' });
+if (!window.indexedDB) storage.forage.setDriver('localStorageWrapper');
 ```
 
 ## License
