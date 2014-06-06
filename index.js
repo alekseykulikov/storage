@@ -82,7 +82,9 @@ function set(key, val, cb) {
     : Promise.all(Object.keys(key).map(setSubkey)).then(wrap(val), val);
 
   function setSubkey(subkey, next) {
-    return set(subkey, key[subkey], next);
+    return key[subkey] === null
+      ? del(subkey, next)
+      : set(subkey, key[subkey], next);
   }
 }
 
