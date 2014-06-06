@@ -1,3 +1,12 @@
+## 0.4.0 / 2014-06-06
+
+  * remove async-each as deps
+  * return promises
+  * make storage function with optional callback
+  * storage() is an alias for storage.count()
+  * storage({ key: null }) actually removes record
+  * improve docs
+
 ## 0.3.0 / 2014-06-06
 
   * use `storage` as a name of db

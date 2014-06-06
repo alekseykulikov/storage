@@ -2,7 +2,7 @@
   "name": "storage",
   "repository": "ask11/storage",
   "description": "Functional wrapper around localForage",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "license": "MIT",
   "keywords": [
     "offline",
@@ -12,7 +12,7 @@
   "dependencies": {
     "mozilla/localForage": "0.8.1",
     "component/type": "1.0.0",
-    "then/promise": "5.0.0"
+    "then/promise": "^5.0.0"
   },
   "scripts": [
     "index.js"

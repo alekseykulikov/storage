@@ -1,7 +1,7 @@
 {
   "name": "storage",
   "description": "Functional wrapper around localForage",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "keywords": [
     "offline",
     "storage",
