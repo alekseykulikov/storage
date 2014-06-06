@@ -96,4 +96,16 @@ describe('storage', function() {
       storage(1);
     }).throw(/arguments/);
   });
+
+  it('callback is optional', function(done) {
+    storage.set('foo', 1);
+    storage.set('bar', 2);
+    storage.del('baz');
+    setTimeout(function() {
+      storage(['foo', 'bar', 'baz'], function(err, res) {
+        expect(res).eql([1, 2, null]);
+        done(err);
+      });
+    }, 30);
+  });
 });
