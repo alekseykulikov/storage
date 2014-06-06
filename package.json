@@ -3,7 +3,7 @@
   "description": "Functional wrapper around localForage",
   "repository": "git@github.com:ask11/storage.git",
   "author": "Aleksey Kulikov <alekseys.kulikov@gmail.com> (http://twitter.com/ask_11)",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "license": "MIT",
   "main": "storage.js",
   "keywords": [

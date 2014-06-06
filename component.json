@@ -2,7 +2,7 @@
   "name": "storage",
   "repository": "ask11/storage",
   "description": "Functional wrapper around localForage",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "license": "MIT",
   "keywords": [
     "offline",

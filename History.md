@@ -1,3 +1,7 @@
+### 0.4.1 / 2014-06-06
+
+  * npm republish
+
 ## 0.4.0 / 2014-06-06
 
   * remove async-each as deps
