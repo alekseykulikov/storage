@@ -9,6 +9,7 @@
   - batch support
   - error first node-style callbacks, [fixes #55](https://github.com/mozilla/localForage/issues/55)
   - simple API inspired by [yields/store](https://github.com/yields/store)
+  - optional callbacks
 
 ## Installation
 
@@ -39,6 +40,19 @@ storage(['key', 'key2'], function(err, all) {}); // all.length == 2
 // delete
 storage('key', null, function(err) {});
 storage(['key1', 'key2', 'key3'], null, function(err) {});
+```
+
+  Working with async storage in developer console can be a problem.
+  For this case, storage provides optional callbacks, and console.log(value) when needed.
+
+```js
+storage.set('foo', 1);
+storage.set('bar', 2);
+storage.get(['foo', 'bar']);
+// => [1 ,2]
+storage.del('bar');
+storage.count();
+// => 1
 ```
 
 ## API
@@ -93,22 +107,23 @@ storage.forage.config({ name: 'my-name' });
 if (!window.indexedDB) storage.forage.setDriver('localStorageWrapper');
 ```
 
-### storage.clear
+### storage.clear()
 
   Clear storage.
 
-### storage.count
+### storage.count()
 
   Get the number of records in storage.
 
-### .get .set .del
+### .get() .set() .del()
 
   If you prefer more explicit API, you can use exposed functions.
+  They methods allow optional callbacks.
 
 ```js
 storage.set('key', 'val', function(err) {});
-storage.get('key', function(err, val) {}); // val
-storage.del('key', function(err) {});
+storage.get('key'); // val
+storage.del('key');
 ```
 
 ## Promises
