@@ -18,8 +18,14 @@ test: install $(wildcard test/*.js)
 test-server:
 	@$(component-testem) --server
 
-release:
+build:
 	@$(component) build --standalone storage --out . --name storage
+
+release: build
+	@echo - upgrade versions in package.json, component.json, bower.json
+	@echo - create tag: git tag 0.0.0
+	@echo - push to github
+	@echo - npm publish
 
 stat:
 	@cloc index.js --quiet --by-file
