@@ -57,10 +57,8 @@ storage.clear = clear;
 
 function get(key, cb) {
   type(key) != 'array'
-    ? localForage.getItem(key).then(wrapSuccess(cb, true), wrapError(cb))
-    : asyncEach(key, get, function(err, res) {
-        !err ? wrapSuccess(cb, true)(res) : wrapError(cb)(err);
-      });
+    ? localForage.getItem(key).then(wrap(cb, true), cb)
+    : asyncEach(key, get, cb);
 }
 
 /**
@@ -73,7 +71,7 @@ function get(key, cb) {
 
 function set(key, val, cb) {
   type(key) != 'object'
-    ? localForage.setItem(key, val).then(wrapSuccess(cb), wrapError(cb))
+    ? localForage.setItem(key, val).then(wrap(cb), cb)
     : asyncEach(Object.keys(key), function(subkey, next) {
         set(subkey, key[subkey], next);
       }, val);
@@ -88,7 +86,7 @@ function set(key, val, cb) {
 
 function del(key, cb) {
   type(key) != 'array'
-    ? localForage.removeItem(key).then(wrapSuccess(cb), wrapError(cb))
+    ? localForage.removeItem(key).then(wrap(cb), cb)
     : asyncEach(key, del, cb);
 }
 
@@ -99,7 +97,7 @@ function del(key, cb) {
  */
 
 function clear(cb) {
-  localForage.clear().then(wrapSuccess(cb), wrapError(cb));
+  localForage.clear().then(wrap(cb), cb);
 }
 
 /**
@@ -109,7 +107,7 @@ function clear(cb) {
  */
 
 function count(cb) {
-  localForage.length().then(wrapSuccess(cb, true), wrapError(cb));
+  localForage.length().then(wrap(cb, true), cb);
 }
 
 /**
@@ -121,23 +119,13 @@ function count(cb) {
  * @return {Function}
  */
 
-function wrapSuccess(cb, hasResult) {
+function wrap(cb, hasResult) {
   return function(res) {
-    if (hasResult) type(cb) == 'function' ? cb(null, res) : console.log(res);
-    else if (type(cb) == 'function') cb();
-  };
-}
-
-/**
- * Wrap error callback, and throw err, when it's missing.
- *
- * @param {Function} cb
- * @return {Function}
- */
-
-function wrapError(cb) {
-  return function(err) {
-    if (type(cb) == 'function') cb(err);
-    else throw err;
+    if (type(cb) == 'function') {
+      hasResult ? cb(null, res) : cb();
+    } else if (hasResult) {
+      console.log(res);
+      return res;
+    }
   };
 }
