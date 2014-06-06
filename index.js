@@ -112,6 +112,7 @@ function count(cb) {
 
 /**
  * Wrap promise style response to callback style.
+ * If `cb` does not specified use console.log to display result.
  *
  * @param {Function} cb
  * @param {Boolean} [hasResult]
@@ -121,7 +122,7 @@ function count(cb) {
 function wrap(cb, hasResult) {
   return function(res) {
     hasResult
-      ? cb(null, res)
+      ? type(cb) == 'function' ? cb(null, res) : console.log(res)
       : cb();
   };
 }
