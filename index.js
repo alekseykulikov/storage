@@ -3,6 +3,14 @@ var asyncEach = require('async-each');
 var type = require('component-type');
 
 /**
+ * Setup `localForage`.
+ */
+
+localForage.config({
+  name: 'storage'
+});
+
+/**
  * Expose `storage`.
  */
 
