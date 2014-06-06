@@ -1,5 +1,5 @@
 var localForage = require('localforage');
-var asyncEach = require('async-each');
+var Promise = require('promise');
 var type = require('component-type');
 
 /**
@@ -56,9 +56,13 @@ storage.clear = clear;
  */
 
 function get(key, cb) {
-  type(key) != 'array'
+  return type(key) != 'array'
     ? localForage.getItem(key).then(wrap(cb, true), cb)
-    : asyncEach(key, get, cb);
+    : asyncEach(key, getSubkey, cb);
+
+  function getSubkey(key) {
+    return get(key, function() {}); // noob function to prevent logs
+  }
 }
 
 /**
@@ -70,11 +74,13 @@ function get(key, cb) {
  */
 
 function set(key, val, cb) {
-  type(key) != 'object'
+  return type(key) != 'object'
     ? localForage.setItem(key, val).then(wrap(cb), cb)
-    : asyncEach(Object.keys(key), function(subkey, next) {
-        set(subkey, key[subkey], next);
-      }, val);
+    : asyncEach(Object.keys(key), setSubkey, val);
+
+  function setSubkey(subkey, next) {
+    return set(subkey, key[subkey], next);
+  }
 }
 
 /**
@@ -85,7 +91,7 @@ function set(key, val, cb) {
  */
 
 function del(key, cb) {
-  type(key) != 'array'
+  return type(key) != 'array'
     ? localForage.removeItem(key).then(wrap(cb), cb)
     : asyncEach(key, del, cb);
 }
@@ -97,7 +103,7 @@ function del(key, cb) {
  */
 
 function clear(cb) {
-  localForage.clear().then(wrap(cb), cb);
+  return localForage.clear().then(wrap(cb), cb);
 }
 
 /**
@@ -107,7 +113,7 @@ function clear(cb) {
  */
 
 function count(cb) {
-  localForage.length().then(wrap(cb, true), cb);
+  return localForage.length().then(wrap(cb, true), cb);
 }
 
 /**
@@ -125,7 +131,19 @@ function wrap(cb, hasResult) {
       hasResult ? cb(null, res) : cb();
     } else if (hasResult) {
       console.log(res);
-      return res;
     }
+    return res;
   };
+}
+
+/**
+ * Async parallel each with promises.
+ *
+ * @param {Array} array
+ * @param {Function} next
+ * @param {Function} cb
+ */
+
+function asyncEach(array, next, cb) {
+  return Promise.all(array.map(next)).then(wrap(cb, true), cb);
 }

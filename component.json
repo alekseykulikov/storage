@@ -12,7 +12,7 @@
   "dependencies": {
     "mozilla/localForage": "0.8.1",
     "component/type": "1.0.0",
-    "paulmillr/async-each": "0.1.4"
+    "then/promise": "5.0.0"
   },
   "scripts": [
     "index.js"
