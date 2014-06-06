@@ -11,13 +11,13 @@ localForage.config({
 });
 
 /**
- * Expose `storage`.
+ * Expose `storage()`.
  */
 
 module.exports = storage;
 
 /**
- * Functional proxy to get/set/del methods.
+ * Facade to get/set/del/count methods.
  *
  * @param {String|Array|Object} key
  * @param {Mixed|Null} val
@@ -41,16 +41,16 @@ function storage(key, val, cb) {
 }
 
 /**
- * Expose methods.
+ * Expose methods & properties.
  */
 
-storage.forage = localForage;
 storage.get = get;
 storage.set = set;
 storage.del = del;
 storage.count = count;
 storage.clear = clear;
 storage.development = false;
+storage.forage = localForage;
 
 /**
  * Get `key`.
@@ -124,7 +124,7 @@ function count(cb) {
 
 /**
  * Wrap promise style response to callback style.
- * If `cb` does not specified use console.log to display result.
+ * If `cb` does not specified, it uses console.log in development mode.
  *
  * @param {Function} cb
  * @param {Boolean} [hasResult]
