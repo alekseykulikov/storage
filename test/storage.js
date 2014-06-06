@@ -83,18 +83,26 @@ describe('storage', function() {
     });
   });
 
+  it('supports promises', function(done) {
+    storage.get(['foo', 'bar', 'baz']).then(function(res) {
+      expect(res).length(3);
+      expect(res).eql([7, ['one', 'two', 'three'], 'string']);
+      storage.del(['bar'], function(res) {
+        expect(res).not.exist;
+        storage().then(function(count) {
+          expect(count).equal(2);
+          storage.clear().then(done);
+        });
+      });
+    });
+  });
+
   it('expose 5 methods', function() {
     expect(storage.clear).exist;
     expect(storage.set).exist;
     expect(storage.get).exist;
     expect(storage.del).exist;
     expect(storage.count).exist;
-  });
-
-  it('validates argument length', function() {
-    expect(function() {
-      storage(1);
-    }).throw(/arguments/);
   });
 
   it('callback is optional', function(done) {
