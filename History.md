@@ -3,8 +3,6 @@
   * use `storage` as a name of db
   * only get&count return result in callback
   * console.log result, when callback is missed
-  * add storage.has(key)
-  * fix remove in batch
 
 ## 0.2.0 / 2014-06-02
 
