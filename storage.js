@@ -55,6 +55,84 @@ require.define = function (name, exports) {
     exports: exports
   };
 };
+require.register("component~type@1.0.0", function (exports, module) {
+
+/**
+ * toString ref.
+ */
+
+var toString = Object.prototype.toString;
+
+/**
+ * Return the type of `val`.
+ *
+ * @param {Mixed} val
+ * @return {String}
+ * @api public
+ */
+
+module.exports = function(val){
+  switch (toString.call(val)) {
+    case '[object Function]': return 'function';
+    case '[object Date]': return 'date';
+    case '[object RegExp]': return 'regexp';
+    case '[object Arguments]': return 'arguments';
+    case '[object Array]': return 'array';
+    case '[object String]': return 'string';
+  }
+
+  if (val === null) return 'null';
+  if (val === undefined) return 'undefined';
+  if (val && val.nodeType === 1) return 'element';
+  if (val === Object(val)) return 'object';
+
+  return typeof val;
+};
+
+});
+
+require.register("paulmillr~async-each@0.1.4", function (exports, module) {
+// async-each MIT license (by Paul Miller from http://paulmillr.com).
+(function(globals) {
+  'use strict';
+  var each = function(items, next, callback) {
+    if (!Array.isArray(items)) throw new TypeError('each() expects array as first argument');
+    if (typeof next !== 'function') throw new TypeError('each() expects function as second argument');
+    if (typeof callback !== 'function') callback = Function.prototype; // no-op
+
+    if (items.length === 0) return callback(undefined, items);
+
+    var transformed = new Array(items.length);
+    var count = 0;
+    var returned = false;
+
+    items.forEach(function(item, index) {
+      next(item, function(error, transformedItem) {
+        if (returned) return;
+        if (error) {
+          returned = true;
+          return callback(error);
+        }
+        transformed[index] = transformedItem;
+        count += 1;
+        if (count === items.length) return callback(undefined, transformed);
+      });
+    });
+  };
+
+  if (typeof define !== 'undefined' && define.amd) {
+    define([], function () {
+      return each;
+    }); // RequireJS
+  } else if (typeof module !== 'undefined' && module.exports) {
+    module.exports = each; // CommonJS
+  } else {
+    globals.asyncEach = each; // <script>
+  }
+})(this);
+
+});
+
 require.register("johntron~asap@master", function (exports, module) {
 "use strict";
 
@@ -1860,88 +1938,18 @@ require.register("mozilla~localforage@0.8.1/src/drivers/websql.js", function (ex
 
 });
 
-require.register("component~type@1.0.0", function (exports, module) {
-
-/**
- * toString ref.
- */
-
-var toString = Object.prototype.toString;
-
-/**
- * Return the type of `val`.
- *
- * @param {Mixed} val
- * @return {String}
- * @api public
- */
-
-module.exports = function(val){
-  switch (toString.call(val)) {
-    case '[object Function]': return 'function';
-    case '[object Date]': return 'date';
-    case '[object RegExp]': return 'regexp';
-    case '[object Arguments]': return 'arguments';
-    case '[object Array]': return 'array';
-    case '[object String]': return 'string';
-  }
-
-  if (val === null) return 'null';
-  if (val === undefined) return 'undefined';
-  if (val && val.nodeType === 1) return 'element';
-  if (val === Object(val)) return 'object';
-
-  return typeof val;
-};
-
-});
-
-require.register("paulmillr~async-each@0.1.4", function (exports, module) {
-// async-each MIT license (by Paul Miller from http://paulmillr.com).
-(function(globals) {
-  'use strict';
-  var each = function(items, next, callback) {
-    if (!Array.isArray(items)) throw new TypeError('each() expects array as first argument');
-    if (typeof next !== 'function') throw new TypeError('each() expects function as second argument');
-    if (typeof callback !== 'function') callback = Function.prototype; // no-op
-
-    if (items.length === 0) return callback(undefined, items);
-
-    var transformed = new Array(items.length);
-    var count = 0;
-    var returned = false;
-
-    items.forEach(function(item, index) {
-      next(item, function(error, transformedItem) {
-        if (returned) return;
-        if (error) {
-          returned = true;
-          return callback(error);
-        }
-        transformed[index] = transformedItem;
-        count += 1;
-        if (count === items.length) return callback(undefined, transformed);
-      });
-    });
-  };
-
-  if (typeof define !== 'undefined' && define.amd) {
-    define([], function () {
-      return each;
-    }); // RequireJS
-  } else if (typeof module !== 'undefined' && module.exports) {
-    module.exports = each; // CommonJS
-  } else {
-    globals.asyncEach = each; // <script>
-  }
-})(this);
-
-});
-
 require.register("storage", function (exports, module) {
 var localForage = require("mozilla~localforage@0.8.1");
 var asyncEach = require("paulmillr~async-each@0.1.4");
 var type = require("component~type@1.0.0");
+
+/**
+ * Setup `localForage`.
+ */
+
+localForage.config({
+  name: 'storage'
+});
 
 /**
  * Expose `storage`.
@@ -1990,8 +1998,10 @@ storage.clear = clear;
 
 function get(key, cb) {
   type(key) != 'array'
-    ? localForage.getItem(key).then(wrap(cb), cb)
-    : asyncEach(key, get, cb);
+    ? localForage.getItem(key).then(wrapSuccess(cb, true), wrapError(cb))
+    : asyncEach(key, get, function(err, res) {
+        !err ? wrapSuccess(cb, true)(res) : wrapError(cb)(err);
+      });
 }
 
 /**
@@ -2004,7 +2014,7 @@ function get(key, cb) {
 
 function set(key, val, cb) {
   type(key) != 'object'
-    ? localForage.setItem(key, val).then(wrap(cb), cb)
+    ? localForage.setItem(key, val).then(wrapSuccess(cb), wrapError(cb))
     : asyncEach(Object.keys(key), function(subkey, next) {
         set(subkey, key[subkey], next);
       }, val);
@@ -2019,7 +2029,7 @@ function set(key, val, cb) {
 
 function del(key, cb) {
   type(key) != 'array'
-    ? localForage.removeItem(key).then(wrap(cb), cb)
+    ? localForage.removeItem(key).then(wrapSuccess(cb), wrapError(cb))
     : asyncEach(key, del, cb);
 }
 
@@ -2030,28 +2040,47 @@ function del(key, cb) {
  */
 
 function clear(cb) {
-  localForage.clear().then(wrap(cb), cb);
+  localForage.clear().then(wrapSuccess(cb), wrapError(cb));
 }
 
 /**
- * Get records count.
+ * Count records.
  *
  * @param {Functionc} cb
  */
 
 function count(cb) {
-  localForage.length().then(wrap(cb), cb);
+  localForage.length().then(wrapSuccess(cb, true), wrapError(cb));
 }
 
 /**
  * Wrap promise style response to callback style.
+ * If `cb` does not specified use console.log to display result.
  *
  * @param {Function} cb
- * @return {Function} cb
+ * @param {Boolean} [hasResult]
+ * @return {Function}
  */
 
-function wrap(cb) {
-  return function(res) { cb(null, res) };
+function wrapSuccess(cb, hasResult) {
+  return function(res) {
+    if (hasResult) type(cb) == 'function' ? cb(null, res) : console.log(res);
+    else if (type(cb) == 'function') cb();
+  };
+}
+
+/**
+ * Wrap error callback, and throw err, when it's missing.
+ *
+ * @param {Function} cb
+ * @return {Function}
+ */
+
+function wrapError(cb) {
+  return function(err) {
+    if (type(cb) == 'function') cb(err);
+    else throw err;
+  };
 }
 
 });
