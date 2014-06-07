@@ -31,23 +31,23 @@ $ npm install ask11-storage --save
 
 ```js
 // set
-storage.set('foo', 'val');
-storage.set({ foo: 'val', bar: 'baz' });
+storage.set('foo', 'val', fn);
+storage.set({ foo: 'val', bar: 'baz' }, fn);
 
 // get
-storage.get('foo'); // 'val'
-storage.get(['foo', 'bar']); // ['val', 'baz']
+storage.get('foo', fn); // 'val'
+storage.get(['foo', 'bar'], fn); // ['val', 'baz']
 
 // delete
-storage.del('foo')
-storage.del(['foo', 'bar', 'baz']);
+storage.del('foo', fn)
+storage.del(['foo', 'bar', 'baz'], fn);
 ```
 
 ## API
 
   Each method returns promise, and accepts optional callback.
 
-### storage()
+### storage([key, val, fn])
 
   Main function is facade to get/set/del/count methods. It's inspired by [yields/store](https://github.com/yields/store).
   Setting a key to `null` is equivalent to deleting the key via `storage.del(key)`.
