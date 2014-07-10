@@ -23,6 +23,7 @@ build:
 
 release: build
 	@echo - upgrade versions in package.json, component.json, bower.json
+	@echo - upgrade History.md and commit
 	@echo - create tag: git tag 0.0.0
 	@echo - push to github
 	@echo - npm publish

@@ -1,3 +1,8 @@
+## 0.5.0 / 2014-07-10
+
+  * upgrade to localForage@0.9.1
+  * downgrade to promise@4.0.0 for localForage consitency
+
 ### 0.4.1 / 2014-06-06
 
   * npm republish
