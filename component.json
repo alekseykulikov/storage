@@ -1,7 +1,7 @@
 {
   "name": "storage",
-  "repository": "ask11/storage",
-  "description": "Functional wrapper around localForage",
+  "repository": "alekseykulikov/storage",
+  "description": "Asynchronous browser storage with multiple back-ends (IndexedDB, WebSQL, localStorage)",
   "version": "0.5.0",
   "license": "MIT",
   "keywords": [

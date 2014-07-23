@@ -1,14 +1,16 @@
 {
-  "name": "ask11-storage",
-  "description": "Functional wrapper around localForage",
-  "repository": "git@github.com:ask11/storage.git",
-  "author": "Aleksey Kulikov <alekseys.kulikov@gmail.com> (http://twitter.com/ask_11)",
+  "name": "asyncstorage",
+  "description": "Asynchronous browser storage with multiple back-ends (IndexedDB, WebSQL, localStorage)",
+  "repository": "git@github.com:alekseykulikov/storage.git",
+  "author": "Aleksey Kulikov <alekseys.kulikov@gmail.com>",
   "version": "0.5.0",
   "license": "MIT",
   "main": "storage.js",
   "keywords": [
     "offline",
     "storage",
+    "IndexedDB",
+    "localStorage",
     "localForage",
     "browserify"
   ],

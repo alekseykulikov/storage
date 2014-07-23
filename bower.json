@@ -1,6 +1,6 @@
 {
   "name": "storage",
-  "description": "Functional wrapper around localForage",
+  "description": "Asynchronous browser storage with multiple back-ends (IndexedDB, WebSQL, localStorage)",
   "version": "0.5.0",
   "keywords": [
     "offline",

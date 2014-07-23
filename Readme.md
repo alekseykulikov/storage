@@ -1,4 +1,4 @@
-# Storage [![Build Status](https://travis-ci.org/ask11/storage.png?branch=master)](https://travis-ci.org/ask11/storage)
+# Storage [![Build Status](https://travis-ci.org/alekseykulikov/storage.png?branch=master)](https://travis-ci.org/alekseykulikov/storage)
 
   Storage is a functional wrapper around [localForage](https://github.com/mozilla/localForage).
   That means it's an asynchronous browser storage with multiple back-ends (IndexedDB, WebSQL, localStorage),
@@ -16,11 +16,11 @@
 
 ```
 $ bower install storage
-$ component install ask11/storage
-$ npm install ask11-storage --save
+$ component install alekseykulikov/storage
+$ npm install asyncstorage --save
 ```
 
-  Standalone build available as [storage.js](https://github.com/ask11/storage/blob/master/storage.js).
+  Standalone build available as [storage.js](https://github.com/alekseykulikov/storage/blob/master/storage.js).
 
 ```html
 <script src="storage.js"></script>
@@ -145,4 +145,4 @@ if (!window.indexedDB) storage.forage.setDriver('localStorageWrapper');
 
 ## License
 
-  Aleksey Kulikov, [MIT](http://ask11.mit-license.org/).
+  Aleksey Kulikov, [MIT](http://alekseykulikov.mit-license.org/).
