@@ -2,7 +2,7 @@
   "name": "storage",
   "repository": "alekseykulikov/storage",
   "description": "Asynchronous browser storage with multiple back-ends (IndexedDB, WebSQL, localStorage)",
-  "version": "0.5.0",
+  "version": "1.0.0",
   "license": "MIT",
   "keywords": [
     "offline",

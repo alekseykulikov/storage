@@ -1,3 +1,8 @@
+# 1.0.0 / 2014-07-23
+
+  * rename npm to asyncstorage
+  * API is stable
+
 ## 0.5.0 / 2014-07-10
 
   * upgrade to localForage@0.9.1
