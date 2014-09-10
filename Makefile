@@ -20,6 +20,8 @@ test-server:
 
 build:
 	@$(component) build --standalone storage --out . --name storage
+	@sed -i.bak 's/require/requireStorage/g' storage.js # for browserify
+	@rm storage.js.bak
 
 release: build
 	@echo - upgrade versions in package.json, component.json, bower.json
