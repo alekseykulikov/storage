@@ -8,6 +8,7 @@
 
   - batch support
   - error first node-style callbacks, [fixes #55](https://github.com/mozilla/localForage/issues/55)
+  - browserify friendly
   - simple API inspired by [yields/store](https://github.com/yields/store)
   - optional callbacks, return promises
   - development mode
@@ -31,29 +32,6 @@ $ npm install asyncstorage --save
 
 ```js
 // set
-storage.set('foo', 'val', fn);
-storage.set({ foo: 'val', bar: 'baz' }, fn);
-
-// get
-storage.get('foo', fn); // 'val'
-storage.get(['foo', 'bar'], fn); // ['val', 'baz']
-
-// delete
-storage.del('foo', fn)
-storage.del(['foo', 'bar', 'baz'], fn);
-```
-
-## API
-
-  Each method returns promise, and accepts optional callback.
-
-### storage([key, val, fn])
-
-  Main function is facade to get/set/del/count methods. It's inspired by [yields/store](https://github.com/yields/store).
-  Setting a key to `null` is equivalent to deleting the key via `storage.del(key)`.
-
-```js
-// set
 storage({ key: 'val', key2: 'val2'}, function(err) {});
 
 // get
@@ -66,6 +44,22 @@ storage(function(err, count) {}); // count == 2
 // delete
 storage('key', null, function(err) {});
 storage(['key', 'key2'], null, function(err) {});
+```
+
+## API
+
+  Each method returns promise, and accepts optional callback.
+
+### storage([key, val, fn])
+
+  Main function is facade to get/set/del/count methods. It's inspired by [yields/store](https://github.com/yields/store).
+  Setting a key to `null` is equivalent to deleting the key via `storage.del(key)`.
+
+```js
+storage({ key: 'val', key2: 'val2'}, function(err) {}); // set
+storage(['key', 'key2'], function(err, all) {}); // get
+storage(function(err, count) {}); // count
+storage('key', null, function(err) {}); // delete
 ```
 
 ### storage.get(key, [fn])
@@ -82,10 +76,6 @@ storage(['key', 'key2'], null, function(err) {});
   Set `key` to `val`.
   You can store any kind of data, including [blobs](https://hacks.mozilla.org/2014/02/localforage-offline-storage-improved/).
 
-### storage.del(key, [fn])
-
-  Delete `key`.
-
 ### storage.set({ key1: val1, key2: val2, key3: val3 }, [fn])
 
   Run a batch operation.
@@ -94,15 +84,19 @@ storage(['key', 'key2'], null, function(err) {});
 
 ```js
 // assume we have 2 records
-storage('foo', 7, fn)
-storage('bar', ['one', 'two', 'three'], fn);
+storage.set('foo', 7, fn)
+storage.set('bar', ['one', 'two', 'three'], fn);
 
-storage({
+storage.set({
   baz: 'val' // create new val
   foo: 1000, // update `foo` value
   bar: null, // remove `bar`
 }, function(err) {});
 ```
+
+### storage.del(key, [fn])
+
+  Delete `key`.
 
 ### storage.del([key1, key2, ..., keyn], [fn])
 
