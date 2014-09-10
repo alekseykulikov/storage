@@ -1,3 +1,8 @@
+## 1.1.0 / 2014-09-10
+
+  * update deps: promise@5.0.0 and localForage@0.9.2
+  * fix browserify support
+
 # 1.0.0 / 2014-07-23
 
   * rename npm to asyncstorage

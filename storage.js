@@ -9,9 +9,9 @@
  * @api public
  */
 
-function require(name) {
-  var module = require.modules[name];
-  if (!module) throw new Error('failed to require "' + name + '"');
+function requireStorage(name) {
+  var module = requireStorage.modules[name];
+  if (!module) throw new Error('failed to requireStorage "' + name + '"');
 
   if (!('exports' in module) && typeof module.definition === 'function') {
     module.client = module.component = true;
@@ -26,7 +26,7 @@ function require(name) {
  * Registered modules.
  */
 
-require.modules = {};
+requireStorage.modules = {};
 
 /**
  * Register module at `name` with callback `definition`.
@@ -36,8 +36,8 @@ require.modules = {};
  * @api private
  */
 
-require.register = function (name, definition) {
-  require.modules[name] = {
+requireStorage.register = function (name, definition) {
+  requireStorage.modules[name] = {
     definition: definition
   };
 };
@@ -50,12 +50,12 @@ require.register = function (name, definition) {
  * @api private
  */
 
-require.define = function (name, exports) {
-  require.modules[name] = {
+requireStorage.define = function (name, exports) {
+  requireStorage.modules[name] = {
     exports: exports
   };
 };
-require.register("johntron~asap@master", function (exports, module) {
+requireStorage.register("johntron~asap@master", function (exports, module) {
 "use strict";
 
 // Use the fastest possible means to execute a task in a future turn
@@ -120,7 +120,7 @@ if (isNodeJS) {
         // Ensure flushing is not bound to any domain.
         var currentDomain = process.domain;
         if (currentDomain) {
-            domain = domain || (1,require)("domain");
+            domain = domain || (1,requireStorage)("domain");
             domain.active = process.domain = null;
         }
 
@@ -154,7 +154,7 @@ if (isNodeJS) {
         flush();
     };
     var requestPortFlush = function () {
-        // Opera requires us to provide a message payload, regardless of
+        // Opera requireStorages us to provide a message payload, regardless of
         // whether we use it.
         channel.port2.postMessage(0);
     };
@@ -187,13 +187,13 @@ module.exports = asap;
 
 });
 
-require.register("then~promise@4.0.0", function (exports, module) {
+requireStorage.register("then~promise@5.0.0", function (exports, module) {
 'use strict';
 
 //This file contains then/promise specific extensions to the core promise API
 
-var Promise = require("then~promise@4.0.0/core.js")
-var asap = require("johntron~asap@master")
+var Promise = requireStorage("then~promise@5.0.0/core.js")
+var asap = requireStorage("johntron~asap@master")
 
 module.exports = Promise
 
@@ -222,7 +222,7 @@ var UNDEFINED = new ValuePromise(undefined)
 var ZERO = new ValuePromise(0)
 var EMPTYSTRING = new ValuePromise('')
 
-Promise.from = Promise.cast = function (value) {
+Promise.resolve = function (value) {
   if (value instanceof Promise) return value
 
   if (value === null) return NULL
@@ -247,6 +247,14 @@ Promise.from = Promise.cast = function (value) {
 
   return new ValuePromise(value)
 }
+
+Promise.from = Promise.cast = function (value) {
+  var err = new Error('Promise.from and Promise.cast are deprecated, use Promise.resolve instead')
+  err.name = 'Warning'
+  console.warn(err.stack)
+  return Promise.resolve(value)
+}
+
 Promise.denodeify = function (fn, argumentCount) {
   argumentCount = argumentCount || Infinity
   return function () {
@@ -283,7 +291,14 @@ Promise.nodeify = function (fn) {
 }
 
 Promise.all = function () {
-  var args = Array.prototype.slice.call(arguments.length === 1 && Array.isArray(arguments[0]) ? arguments[0] : arguments)
+  var calledWithArray = arguments.length === 1 && Array.isArray(arguments[0])
+  var args = Array.prototype.slice.call(calledWithArray ? arguments[0] : arguments)
+
+  if (!calledWithArray) {
+    var err = new Error('Promise.all should be called with a single array, calling it with multiple arguments is deprecated')
+    err.name = 'Warning'
+    console.warn(err.stack)
+  }
 
   return new Promise(function (resolve, reject) {
     if (args.length === 0) return resolve([])
@@ -311,6 +326,20 @@ Promise.all = function () {
   })
 }
 
+Promise.reject = function (value) {
+  return new Promise(function (resolve, reject) { 
+    reject(value);
+  });
+}
+
+Promise.race = function (values) {
+  return new Promise(function (resolve, reject) { 
+    values.forEach(function(value){
+      Promise.resolve(value).then(resolve, reject);
+    })
+  });
+}
+
 /* Prototype Methods */
 
 Promise.prototype.done = function (onFulfilled, onRejected) {
@@ -323,7 +352,7 @@ Promise.prototype.done = function (onFulfilled, onRejected) {
 }
 
 Promise.prototype.nodeify = function (callback) {
-  if (callback === null || typeof callback == 'undefined') return this
+  if (typeof callback != 'function') return this
 
   this.then(function (value) {
     asap(function () {
@@ -336,37 +365,16 @@ Promise.prototype.nodeify = function (callback) {
   })
 }
 
-Promise.prototype.catch = function (onRejected) {
+Promise.prototype['catch'] = function (onRejected) {
   return this.then(null, onRejected);
-}
-
-
-Promise.resolve = function (value) {
-  return new Promise(function (resolve) { 
-    resolve(value);
-  });
-}
-
-Promise.reject = function (value) {
-  return new Promise(function (resolve, reject) { 
-    reject(value);
-  });
-}
-
-Promise.race = function (values) {
-  return new Promise(function (resolve, reject) { 
-    values.map(function(value){
-      Promise.cast(value).then(resolve, reject);
-    })
-  });
 }
 
 });
 
-require.register("then~promise@4.0.0/core.js", function (exports, module) {
+requireStorage.register("then~promise@5.0.0/core.js", function (exports, module) {
 'use strict';
 
-var asap = require("johntron~asap@master")
+var asap = requireStorage("johntron~asap@master")
 
 module.exports = Promise
 function Promise(fn) {
@@ -472,13 +480,13 @@ function doResolve(fn, onFulfilled, onRejected) {
 
 });
 
-require.register("mozilla~localforage@0.9.1", function (exports, module) {
+requireStorage.register("mozilla~localforage@0.9.2", function (exports, module) {
 (function() {
     'use strict';
 
     // Promises!
     var Promise = (typeof module !== 'undefined' && module.exports) ?
-                  require("then~promise@4.0.0") : this.Promise;
+                  requireStorage("then~promise@5.0.0") : this.Promise;
 
     // Avoid those magic constants!
     var MODULE_TYPE_DEFINE = 1;
@@ -496,28 +504,6 @@ require.register("mozilla~localforage@0.9.1", function (exports, module) {
     } else if (typeof module !== 'undefined' && module.exports) {
         moduleType = MODULE_TYPE_EXPORT;
     }
-
-    // Initialize IndexedDB; fall back to vendor-prefixed versions if needed.
-    var indexedDB = indexedDB || this.indexedDB || this.webkitIndexedDB ||
-                    this.mozIndexedDB || this.OIndexedDB ||
-                    this.msIndexedDB;
-
-    var supportsIndexedDB = indexedDB &&
-                            typeof indexedDB.open === 'function' &&
-                            indexedDB.open('_localforage_spec_test', 1)
-                                     .onupgradeneeded === null;
-
-    // Check for WebSQL.
-    var openDatabase = this.openDatabase;
-
-    // Check for localStorage.
-    var supportsLocalStorage = (function() {
-        try {
-            return localStorage && typeof localStorage.setItem === 'function';
-        } catch (e) {
-            return false;
-        }
-    })();
 
     // The actual localForage object that we expose as a module or via a
     // global. It's extended by pulling in one of our other libraries.
@@ -573,21 +559,29 @@ require.register("mozilla~localforage@0.9.1", function (exports, module) {
 
         _driverSet: null,
 
-        setDriver: function(driverName, callback, errorCallback) {
+        setDriver: function(drivers, callback, errorCallback) {
             var self = this;
 
+            var isArray = Array.isArray || function(arg) {
+                return Object.prototype.toString.call(arg) === '[object Array]';
+            };
+
+            if (!isArray(drivers) && typeof drivers === 'string') {
+                drivers = [drivers];
+            }
+
             this._driverSet = new Promise(function(resolve, reject) {
-                if ((!supportsIndexedDB &&
-                     driverName === localForage.INDEXEDDB) ||
-                    (!openDatabase && driverName === localForage.WEBSQL) ||
-                    (!supportsLocalStorage &&
-                     driverName === localForage.LOCALSTORAGE)) {
+                var driverName = self._getFirstSupportedDriver(drivers);
+
+                if (!driverName) {
+                    var error = new Error('No available storage method found.');
+                    self._driverSet = Promise.reject(error);
 
                     if (errorCallback) {
-                        errorCallback();
+                        errorCallback(error);
                     }
 
-                    reject(localForage);
+                    reject(error);
 
                     return;
                 }
@@ -595,9 +589,9 @@ require.register("mozilla~localforage@0.9.1", function (exports, module) {
                 self._ready = null;
 
                 // We allow localForage to be declared as a module or as a
-                // library available without AMD/require.js.
+                // library available without AMD/requireStorage.js.
                 if (moduleType === MODULE_TYPE_DEFINE) {
-                    require([driverName], function(lib) {
+                    requireStorage([driverName], function(lib) {
                         self._extend(lib);
 
                         if (callback) {
@@ -612,13 +606,13 @@ require.register("mozilla~localforage@0.9.1", function (exports, module) {
                     var driver;
                     switch (driverName) {
                         case self.INDEXEDDB:
-                            driver = require("mozilla~localforage@0.9.1/src/drivers/indexeddb.js");
+                            driver = requireStorage("mozilla~localforage@0.9.2/src/drivers/indexeddb.js");
                             break;
                         case self.LOCALSTORAGE:
-                            driver = require("mozilla~localforage@0.9.1/src/drivers/localstorage.js");
+                            driver = requireStorage("mozilla~localforage@0.9.2/src/drivers/localstorage.js");
                             break;
                         case self.WEBSQL:
-                            driver = require("mozilla~localforage@0.9.1/src/drivers/websql.js");
+                            driver = requireStorage("mozilla~localforage@0.9.2/src/drivers/websql.js");
                     }
 
                     self._extend(driver);
@@ -636,16 +630,34 @@ require.register("mozilla~localforage@0.9.1", function (exports, module) {
             return this._driverSet;
         },
 
+        _getFirstSupportedDriver: function(drivers) {
+            if (drivers) {
+                for (var i = 0; i < drivers.length; i++) {
+                    var driver = drivers[i];
+
+                    if (this.supports(driver)) {
+                        return driver;
+                    }
+                }
+            }
+
+            return null;
+        },
+
+        supports: function(driverName) {
+            return !!driverSupport[driverName];
+        },
+
         ready: function(callback) {
-            var ready = new Promise(function(resolve) {
+            var ready = new Promise(function(resolve, reject) {
                 localForage._driverSet.then(function() {
                     if (localForage._ready === null) {
                         localForage._ready = localForage._initStorage(
                             localForage._config);
                     }
 
-                    localForage._ready.then(resolve);
-                });
+                    localForage._ready.then(resolve, reject);
+                }, reject);
             });
 
             ready.then(callback, callback);
@@ -662,37 +674,50 @@ require.register("mozilla~localforage@0.9.1", function (exports, module) {
         }
     };
 
-    // Select our storage library.
-    var storageLibrary;
     // Check to see if IndexedDB is available and if it is the latest
     // implementation; it's our preferred backend library. We use "_spec_test"
     // as the name of the database because it's not the one we'll operate on,
     // but it's useful to make sure its using the right spec.
     // See: https://github.com/mozilla/localForage/issues/128
-    if (supportsIndexedDB) {
-        storageLibrary = localForage.INDEXEDDB;
-    } else if (openDatabase) { // WebSQL is available, so we'll use that.
-        storageLibrary = localForage.WEBSQL;
-    } else if (supportsLocalStorage) { // If nothing else is available,
-                                       // we try to use localStorage.
-        storageLibrary = localForage.LOCALSTORAGE;
-    }
+    var driverSupport = (function(_this) {
+        // Initialize IndexedDB; fall back to vendor-prefixed versions
+        // if needed.
+        var indexedDB = indexedDB || _this.indexedDB || _this.webkitIndexedDB ||
+                        _this.mozIndexedDB || _this.OIndexedDB ||
+                        _this.msIndexedDB;
 
-    // If window.localForageConfig is set, use it for configuration.
-    if (this.localForageConfig) {
-        localForage.config = this.localForageConfig;
-    }
+        var result = {};
 
-    // Set the (default) driver, or report the error.
-    if (storageLibrary) {
-        localForage.setDriver(storageLibrary);
-    } else {
-        localForage._ready = Promise.reject(
-            new Error('No available storage method found.'));
-    }
+        result[localForage.WEBSQL] = !!_this.openDatabase;
+        result[localForage.INDEXEDDB] = !!(
+            indexedDB &&
+            typeof indexedDB.open === 'function' &&
+            indexedDB.open('_localforage_spec_test', 1)
+                     .onupgradeneeded === null
+        );
+
+        result[localForage.LOCALSTORAGE] = !!(function() {
+            try {
+                return (localStorage &&
+                        typeof localStorage.setItem === 'function');
+            } catch (e) {
+                return false;
+            }
+        })();
+
+        return result;
+    })(this);
+
+    var driverTestOrder = [
+        localForage.INDEXEDDB,
+        localForage.WEBSQL,
+        localForage.LOCALSTORAGE
+    ];
+
+    localForage.setDriver(driverTestOrder);
 
     // We allow localForage to be declared as a module or as a library
-    // available without AMD/require.js.
+    // available without AMD/requireStorage.js.
     if (moduleType === MODULE_TYPE_DEFINE) {
         define(function() {
             return localForage;
@@ -706,7 +731,7 @@ require.register("mozilla~localforage@0.9.1", function (exports, module) {
 
 });
 
-require.register("mozilla~localforage@0.9.1/src/drivers/indexeddb.js", function (exports, module) {
+requireStorage.register("mozilla~localforage@0.9.2/src/drivers/indexeddb.js", function (exports, module) {
 // Some code originally from async_storage.js in
 // [Gaia](https://github.com/mozilla-b2g/gaia).
 (function() {
@@ -716,7 +741,7 @@ require.register("mozilla~localforage@0.9.1/src/drivers/indexeddb.js", function 
 
     // Promises!
     var Promise = (typeof module !== 'undefined' && module.exports) ?
-                  require("then~promise@4.0.0") : this.Promise;
+                  requireStorage("then~promise@5.0.0") : this.Promise;
 
     var db = null;
     var dbInfo = {};
@@ -782,9 +807,7 @@ require.register("mozilla~localforage@0.9.1/src/drivers/indexeddb.js", function 
 
                     reject(req.error);
                 };
-            }, function(err) {
-               reject(err) ;
-            });
+            }, reject);
         });
     }
 
@@ -826,9 +849,7 @@ require.register("mozilla~localforage@0.9.1/src/drivers/indexeddb.js", function 
 
                     reject(req.error);
                 };
-            }, function(err) {
-               reject(err) ;
-            });
+            }, reject);
         });
     }
 
@@ -839,14 +860,12 @@ require.register("mozilla~localforage@0.9.1/src/drivers/indexeddb.js", function 
                 var store = db.transaction(dbInfo.storeName, 'readwrite')
                               .objectStore(dbInfo.storeName);
 
-                // We use `['delete']` instead of `.delete` because IE 8 will
-                // throw a fit if it sees the reserved word "delete" in this
-                // scenario.
-                // See: https://github.com/mozilla/localForage/pull/67
-                //
-                // This can be removed once we no longer care about IE 8, for
-                // what that's worth.
-                var req = store['delete'](key);
+                // We use a Grunt task to make this safe for IE and some
+                // versions of Android (including those used by Cordova).
+                // Normally IE won't like `.delete()` and will insist on
+                // using `['delete']()`, but we have a build step that
+                // fixes this for us now.
+                var req = store.delete(key);
                 req.onsuccess = function() {
 
                     deferCallback(callback);
@@ -875,9 +894,7 @@ require.register("mozilla~localforage@0.9.1/src/drivers/indexeddb.js", function 
                         reject(error);
                     }
                 };
-            }, function(err) {
-               reject(err) ;
-            });
+            }, reject);
         });
     }
 
@@ -902,9 +919,7 @@ require.register("mozilla~localforage@0.9.1/src/drivers/indexeddb.js", function 
 
                     reject(req.error);
                 };
-            }, function(err) {
-               reject(err) ;
-            });
+            }, reject);
         });
     }
 
@@ -931,9 +946,7 @@ require.register("mozilla~localforage@0.9.1/src/drivers/indexeddb.js", function 
 
                     reject(req.error);
                 };
-            }, function(err) {
-               reject(err) ;
-            });
+            }, reject);
         });
     }
 
@@ -1001,9 +1014,7 @@ require.register("mozilla~localforage@0.9.1/src/drivers/indexeddb.js", function 
 
                     reject(req.error);
                 };
-            }, function(err) {
-               reject(err) ;
-            });
+            }, reject);
         });
     }
 
@@ -1041,9 +1052,7 @@ require.register("mozilla~localforage@0.9.1/src/drivers/indexeddb.js", function 
 
                     reject(req.error);
                 };
-            }, function(err) {
-               reject(err) ;
-            });
+            }, reject);
         });
     }
 
@@ -1085,7 +1094,7 @@ require.register("mozilla~localforage@0.9.1/src/drivers/indexeddb.js", function 
 
 });
 
-require.register("mozilla~localforage@0.9.1/src/drivers/localstorage.js", function (exports, module) {
+requireStorage.register("mozilla~localforage@0.9.2/src/drivers/localstorage.js", function (exports, module) {
 // If IndexedDB isn't available, we'll fall back to localStorage.
 // Note that this will have considerable performance and storage
 // side-effects (all data will be serialized on save and only data that
@@ -1097,7 +1106,7 @@ require.register("mozilla~localforage@0.9.1/src/drivers/localstorage.js", functi
     var dbInfo = {};
     // Promises!
     var Promise = (typeof module !== 'undefined' && module.exports) ?
-                  require("then~promise@4.0.0") : this.Promise;
+                  requireStorage("then~promise@5.0.0") : this.Promise;
     var localStorage = null;
 
     // If the app is running inside a Google Chrome packaged webapp, or some
@@ -1153,7 +1162,7 @@ require.register("mozilla~localforage@0.9.1/src/drivers/localstorage.js", functi
     // the app's key/value store!
     function clear(callback) {
         var _this = this;
-        return new Promise(function(resolve) {
+        return new Promise(function(resolve, reject) {
             _this.ready().then(function() {
                 localStorage.clear();
 
@@ -1162,7 +1171,7 @@ require.register("mozilla~localforage@0.9.1/src/drivers/localstorage.js", functi
                 }
 
                 resolve();
-            });
+            }, reject);
         });
     }
 
@@ -1196,14 +1205,14 @@ require.register("mozilla~localforage@0.9.1/src/drivers/localstorage.js", functi
 
                     reject(e);
                 }
-            });
+            }, reject);
         });
     }
 
     // Same as localStorage's key() method, except takes a callback.
     function key(n, callback) {
         var _this = this;
-        return new Promise(function(resolve) {
+        return new Promise(function(resolve, reject) {
             _this.ready().then(function() {
                 var result;
                 try {
@@ -1221,13 +1230,13 @@ require.register("mozilla~localforage@0.9.1/src/drivers/localstorage.js", functi
                     callback(result);
                 }
                 resolve(result);
-            });
+            }, reject);
         });
     }
 
     function keys(callback) {
         var _this = this;
-        return new Promise(function(resolve) {
+        return new Promise(function(resolve, reject) {
             _this.ready().then(function() {
                 var length = localStorage.length;
                 var keys = [];
@@ -1241,14 +1250,14 @@ require.register("mozilla~localforage@0.9.1/src/drivers/localstorage.js", functi
                 }
 
                 resolve(keys);
-            });
+            }, reject);
         });
     }
 
     // Supply the number of keys in the datastore to the callback function.
     function length(callback) {
         var _this = this;
-        return new Promise(function(resolve) {
+        return new Promise(function(resolve, reject) {
             _this.ready().then(function() {
                 var result = localStorage.length;
 
@@ -1257,14 +1266,14 @@ require.register("mozilla~localforage@0.9.1/src/drivers/localstorage.js", functi
                 }
 
                 resolve(result);
-            });
+            }, reject);
         });
     }
 
     // Remove an item from the store, nice and simple.
     function removeItem(key, callback) {
         var _this = this;
-        return new Promise(function(resolve) {
+        return new Promise(function(resolve, reject) {
             _this.ready().then(function() {
                 localStorage.removeItem(keyPrefix + key);
 
@@ -1273,7 +1282,7 @@ require.register("mozilla~localforage@0.9.1/src/drivers/localstorage.js", functi
                 }
 
                 resolve();
-            });
+            }, reject);
         });
     }
 
@@ -1349,7 +1358,7 @@ require.register("mozilla~localforage@0.9.1/src/drivers/localstorage.js", functi
             str = String.fromCharCode.apply(null, uint16Array);
         } catch (e) {
             // This is a fallback implementation in case the first one does
-            // not work. This is required to get the phantomjs passing...
+            // not work. This is requireStoraged to get the phantomjs passing...
             for (var i = 0; i < uint16Array.length; i++) {
                 str += String.fromCharCode(uint16Array[i]);
             }
@@ -1479,7 +1488,7 @@ require.register("mozilla~localforage@0.9.1/src/drivers/localstorage.js", functi
                         resolve(originalValue);
                     }
                 });
-            });
+            }, reject);
         });
     }
 
@@ -1509,7 +1518,7 @@ require.register("mozilla~localforage@0.9.1/src/drivers/localstorage.js", functi
 
 });
 
-require.register("mozilla~localforage@0.9.1/src/drivers/websql.js", function (exports, module) {
+requireStorage.register("mozilla~localforage@0.9.2/src/drivers/websql.js", function (exports, module) {
 /*
  * Includes code from:
  *
@@ -1529,7 +1538,7 @@ require.register("mozilla~localforage@0.9.1/src/drivers/websql.js", function (ex
 
     // Promises!
     var Promise = (typeof module !== 'undefined' && module.exports) ?
-                  require("then~promise@4.0.0") : this.Promise;
+                  requireStorage("then~promise@5.0.0") : this.Promise;
 
     var openDatabase = this.openDatabase;
     var db = null;
@@ -1568,14 +1577,14 @@ require.register("mozilla~localforage@0.9.1/src/drivers/websql.js", function (ex
             }
         }
 
-        return new Promise(function(resolve) {
+        return new Promise(function(resolve, reject) {
             // Open the database; the openDatabase API will automatically
             // create it for us if it doesn't exist.
             try {
                 db = openDatabase(dbInfo.name, dbInfo.version,
                                   dbInfo.description, dbInfo.size);
             } catch (e) {
-                return _this.setDriver('localStorageWrapper').then(resolve);
+                return _this.setDriver('localStorageWrapper').then(resolve, reject);
             }
 
             // Create our key/value table if it doesn't exist.
@@ -1583,7 +1592,9 @@ require.register("mozilla~localforage@0.9.1/src/drivers/websql.js", function (ex
                 t.executeSql('CREATE TABLE IF NOT EXISTS ' + dbInfo.storeName +
                              ' (id INTEGER PRIMARY KEY, key unique, value)', [], function() {
                     resolve();
-                }, null);
+                }, function(t, error) {
+                    reject(error);
+                });
             });
         });
     }
@@ -1616,7 +1627,7 @@ require.register("mozilla~localforage@0.9.1/src/drivers/websql.js", function (ex
                         reject(error);
                     });
                 });
-            });
+            }, reject);
         });
     }
 
@@ -1672,7 +1683,7 @@ require.register("mozilla~localforage@0.9.1/src/drivers/websql.js", function (ex
                         });
                     }
                 });
-            });
+            }, reject);
         });
     }
 
@@ -1696,7 +1707,7 @@ require.register("mozilla~localforage@0.9.1/src/drivers/websql.js", function (ex
                         reject(error);
                     });
                 });
-            });
+            }, reject);
         });
     }
 
@@ -1721,7 +1732,7 @@ require.register("mozilla~localforage@0.9.1/src/drivers/websql.js", function (ex
                         reject(error);
                     });
                 });
-            });
+            }, reject);
         });
     }
 
@@ -1750,7 +1761,7 @@ require.register("mozilla~localforage@0.9.1/src/drivers/websql.js", function (ex
                         reject(error);
                     });
                 });
-            });
+            }, reject);
         });
     }
 
@@ -1783,7 +1794,7 @@ require.register("mozilla~localforage@0.9.1/src/drivers/websql.js", function (ex
                         reject(error);
                     });
                 });
-            });
+            }, reject);
         });
     }
 
@@ -1814,7 +1825,7 @@ require.register("mozilla~localforage@0.9.1/src/drivers/websql.js", function (ex
                         reject(error);
                     });
                 });
-            });
+            }, reject);
         });
     }
 
@@ -2023,7 +2034,7 @@ require.register("mozilla~localforage@0.9.1/src/drivers/websql.js", function (ex
 
 });
 
-require.register("component~type@1.0.0", function (exports, module) {
+requireStorage.register("component~type@1.0.0", function (exports, module) {
 
 /**
  * toString ref.
@@ -2059,10 +2070,10 @@ module.exports = function(val){
 
 });
 
-require.register("storage", function (exports, module) {
-var localForage = require("mozilla~localforage@0.9.1");
-var Promise = require("then~promise@4.0.0");
-var type = require("component~type@1.0.0");
+requireStorage.register("storage", function (exports, module) {
+var localForage = requireStorage("mozilla~localforage@0.9.2");
+var Promise = requireStorage("then~promise@5.0.0");
+var type = requireStorage("component~type@1.0.0");
 
 /**
  * Setup `localForage`.
@@ -2207,10 +2218,10 @@ function wrap(cb, hasResult) {
 });
 
 if (typeof exports == "object") {
-  module.exports = require("storage");
+  module.exports = requireStorage("storage");
 } else if (typeof define == "function" && define.amd) {
-  define([], function(){ return require("storage"); });
+  define([], function(){ return requireStorage("storage"); });
 } else {
-  this["storage"] = require("storage");
+  this["storage"] = requireStorage("storage");
 }
 })()
