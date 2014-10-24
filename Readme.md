@@ -7,7 +7,7 @@
   The main differences with localForage:
 
   - batch support
-  - error first node-style callbacks, [fixes #55](https://github.com/mozilla/localForage/issues/55)
+  - error first node-style callbacks
   - browserify friendly
   - simple API inspired by [yields/store](https://github.com/yields/store)
   - optional callbacks, return promises

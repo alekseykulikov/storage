@@ -9,13 +9,12 @@
   ],
   "ignore": [
     "**/.*",
-    "Makefile",
-    "index.js",
+    "lib/",
     "test/",
     "component.json",
     "package.json"
   ],
   "main": [
-    "storage.js"
+    "dist/storage.js"
   ]
 }

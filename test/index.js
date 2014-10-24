@@ -1,9 +1,9 @@
 var expect = require('chai').expect;
-var storage = require('../index');
+var storage = require('../lib');
 
 describe('storage', function() {
   before(function() {
-    if (!window.indexedDB) storage.forage.setDriver('localStorageWrapper');
+    if (!window.indexedDB) storage.forage.setDriver(storage.forage.LOCALSTORAGE);
   });
 
   beforeEach(function(done) {
@@ -34,8 +34,8 @@ describe('storage', function() {
   });
 
   it('#set one value', function(done) {
-    storage(5, 50, function(err) {
-      storage(5, function(err2, val) {
+    storage('5', 50, function(err) {
+      storage('5', function(err2, val) {
         expect(val).equal(50);
         done(err || err2);
       });
