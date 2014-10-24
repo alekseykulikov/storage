@@ -1,3 +1,9 @@
+## 1.2.0 / 2014-10-24
+
+  * upgrade to localForage@1.1.1
+  * use browserify instead of component(1)
+  * use npm-scripts instead of Makefile
+
 ## 1.1.0 / 2014-09-10
 
   * update deps: promise@5.0.0 and localForage@0.9.2

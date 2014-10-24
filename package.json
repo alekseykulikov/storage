@@ -5,12 +5,13 @@
   "author": "Aleksey Kulikov <alekseys.kulikov@gmail.com>",
   "version": "1.1.0",
   "license": "MIT",
-  "main": "storage.js",
+  "main": "lib/index.js",
   "keywords": [
     "offline",
     "storage",
     "IndexedDB",
     "localStorage",
+    "WebSQL",
     "localForage",
     "browserify"
   ],
