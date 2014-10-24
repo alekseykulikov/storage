@@ -15,10 +15,19 @@
     "browserify"
   ],
   "scripts": {
-    "test": "make test"
+    "test": "browserify-test",
+    "start": "browserify-test --watch",
+    "build": "browserify lib/index.js -s storage -o dist/storage.js",
+    "stat": "cloc lib/index.js --quiet --by-file && cloc test/ --quiet --by-file"
+  },
+  "dependencies": {
+    "component-type": "^1.0.0",
+    "polyfill-function-prototype-bind": "0.0.1",
+    "promise": "^6.0.1"
   },
   "devDependencies": {
-    "component": "1.0.0-rc5",
-    "component-testem": "0.9.0"
+    "browserify": "^6.1.0",
+    "browserify-test": "^1.0.0",
+    "chai": "^1.9.2"
   }
 }
