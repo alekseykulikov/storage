@@ -19,25 +19,28 @@ describe('storage', function() {
 
   it('#get one key', function(done) {
     storage('foo', function(err, val) {
+      if (err) return done(err);
       expect(val).equal(7);
-      done(err);
+      done();
     });
   });
 
   it('#get many keys', function(done) {
     storage(['bar', 'baz'], function(err, res) {
+      if (err) return done(err);
       expect(res).length(2);
       expect(res[0]).eql(['one', 'two', 'three']);
       expect(res[1]).equal('string');
-      done(err);
+      done();
     });
   });
 
   it('#set one value', function(done) {
     storage('5', 50, function(err) {
       storage('5', function(err2, val) {
+        if (err || err2) return done(err || err2);
         expect(val).equal(50);
-        done(err || err2);
+        done();
       });
     });
   });
@@ -45,8 +48,9 @@ describe('storage', function() {
   it('#del key', function(done) {
     storage('foo', null, function(err) {
       storage('foo', function(err2, val) {
+        if (err || err2) return done(err || err2);
         expect(val).not.exist;
-        done(err || err2);
+        done();
       });
     });
   });
@@ -54,17 +58,19 @@ describe('storage', function() {
   it('#del many keys', function(done) {
     storage(['foo', 'bar'], null, function(err) {
       storage(['foo', 'bar'], function(err2, res) {
+        if (err || err2) return done(err || err2);
         expect(res[0]).not.exist;
         expect(res[1]).not.exist;
-        done(err || err2);
+        done();
       });
     });
   });
 
   it('#count', function(done) {
     storage.count(function(err, count) {
+      if (err) return done(err);
       expect(count).equal(3);
-      done(err);
+      done();
     });
   });
 
@@ -75,10 +81,11 @@ describe('storage', function() {
       key: 'val'
     }, function(err) {
       storage(['foo', 'bar', 'key'], function(err2, res) {
+        if (err || err2) return done(err || err2);
         expect(res[0]).equal(10);
         expect(res[1]).not.exist;
         expect(res[2]).equal('val');
-        done(err || err2);
+        done();
       });
     });
   });
@@ -111,8 +118,9 @@ describe('storage', function() {
     storage.del('baz');
     setTimeout(function() {
       storage(['foo', 'bar', 'baz'], function(err, res) {
+        if (err) return done(err);
         expect(res).eql([1, 2, null]);
-        done(err);
+        done();
       });
     }, 30);
   });
