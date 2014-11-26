@@ -1,3 +1,8 @@
+## 1.3.0 / 2014-11-26
+
+  * use localForage@1.1.1 as node dependency
+  * don't require polyfill-function-prototype-bind
+
 ## 1.2.0 / 2014-10-24
 
   * upgrade to localForage@1.1.1
