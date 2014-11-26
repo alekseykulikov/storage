@@ -22,12 +22,13 @@
   },
   "dependencies": {
     "component-type": "^1.0.0",
+    "localforage": "^1.1.1",
     "polyfill-function-prototype-bind": "0.0.1",
-    "promise": "^6.0.1"
+    "promise": "^5.0.0"
   },
   "devDependencies": {
-    "browserify": "^6.1.0",
-    "browserify-test": "^1.0.0",
-    "chai": "^1.9.2"
+    "browserify": "^6.3.3",
+    "browserify-test": "^1.0.1",
+    "chai": "^1.10.0"
   }
 }
