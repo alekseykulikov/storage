@@ -124,4 +124,11 @@ describe('storage', function() {
       });
     }, 30);
   });
+
+  it('exposes localForage for advanced methods', function(done) {
+    storage.forage.keys().then(function(keys) {
+      expect(keys.sort()).eql(['bar', 'baz', 'foo']);
+      done();
+    });
+  });
 });

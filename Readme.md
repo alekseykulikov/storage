@@ -128,12 +128,15 @@ storage.count();
 ### storage.forage
 
   It gives you access to the localForage instance.
-  You can use it to configure backend.
-  By default storage setups only `name` option as `storage`.
+  You can use it to configure backend or for advanced methods as `keys` or `iterate`.
 
 ```js
 storage.forage.config({ name: 'my-name' });
-if (!window.indexedDB) storage.forage.setDriver('localStorageWrapper');
+if (!window.indexedDB) storage.forage.setDriver(storage.forage.LOCALSTORAGE);
+
+storage.forage.keys().then(function(keys) {
+  console.log(keys);
+});
 ```
 
 ## License
