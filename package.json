@@ -3,7 +3,7 @@
   "description": "Asynchronous browser storage with multiple back-ends (IndexedDB, WebSQL, localStorage)",
   "repository": "git@github.com:alekseykulikov/storage.git",
   "author": "Aleksey Kulikov <alekseys.kulikov@gmail.com>",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [

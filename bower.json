@@ -1,7 +1,7 @@
 {
   "name": "storage",
   "description": "Asynchronous browser storage with multiple back-ends (IndexedDB, WebSQL, localStorage)",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "keywords": [
     "offline",
     "storage",

@@ -1,3 +1,7 @@
+## 1.4.0 / 2015-01-06
+
+  * deps: localForage@1.2.0
+
 ## 1.3.0 / 2014-11-26
 
   * use localForage@1.1.1 as node dependency
