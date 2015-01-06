@@ -21,12 +21,12 @@
     "build": "browserify lib/index.js -s storage -o dist/storage.js"
   },
   "dependencies": {
-    "component-type": "^1.0.0",
-    "localforage": "1.1.1",
+    "component-type": "^1.1.0",
+    "localforage": "1.2.0",
     "promise": "^5.0.0"
   },
   "devDependencies": {
-    "browserify": "^6.3.3",
+    "browserify": "^8.0.3",
     "browserify-test": "^1.0.1",
     "chai": "^1.10.0"
   }
