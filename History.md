@@ -1,3 +1,8 @@
+## 1.5.0 / 2015-03-14
+
+  * add [LICENSE](./LICENSE) file
+  * deps: localForage@1.2.2
+
 ## 1.4.0 / 2015-01-06
 
   * deps: localForage@1.2.0
