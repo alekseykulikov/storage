@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "component-type": "^1.1.0",
-    "localforage": "1.2.0",
+    "localforage": "1.2.2",
     "promise": "^5.0.0"
   },
   "devDependencies": {
