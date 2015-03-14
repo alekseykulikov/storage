@@ -26,8 +26,9 @@
     "promise": "^5.0.0"
   },
   "devDependencies": {
-    "browserify": "^8.0.3",
-    "browserify-test": "^1.0.1",
-    "chai": "^1.10.0"
+    "browserify": "^9.0.3",
+    "browserify-test": "^1.1.0",
+    "chai": "^2.1.1",
+    "function-bind": "^1.0.2"
   }
 }

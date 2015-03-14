@@ -3,6 +3,7 @@ var storage = require('../lib');
 
 describe('storage', function() {
   before(function() {
+    if (!Function.prototype.bind) Function.prototype.bind = require('function-bind');
     if (!window.indexedDB) storage.forage.setDriver(storage.forage.LOCALSTORAGE);
   });
 
