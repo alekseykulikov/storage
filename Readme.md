@@ -6,8 +6,8 @@
 
   The main differences with localForage:
 
-  - batch support
-  - error first node-style callbacks (not relevant since localForage@1.0)
+  - batch get/set support
+  - callbacks or promises
   - browserify friendly
   - simple API inspired by [yields/store](https://github.com/yields/store)
   - development mode
@@ -15,12 +15,12 @@
 ## Installation
 
 ```
+$ npm install asyncstorage --save
 $ bower install storage
 $ component install alekseykulikov/storage
-$ npm install asyncstorage --save
 ```
 
-  Standalone build available as [storage.js](https://github.com/alekseykulikov/storage/blob/master/storage.js).
+  Standalone build available as [./dist/storage.js](./dist/storage.js).
 
 ```html
 <script src="storage.js"></script>
@@ -53,13 +53,6 @@ storage(['key', 'key2'], null, function(err) {});
 
   Main function is facade to get/set/del/count methods. It's inspired by [yields/store](https://github.com/yields/store).
   Setting a key to `null` is equivalent to deleting the key via `storage.del(key)`.
-
-```js
-storage({ key: 'val', key2: 'val2'}, function(err) {}); // set
-storage(['key', 'key2'], function(err, all) {}); // get
-storage(function(err, count) {}); // count
-storage('key', null, function(err) {}); // delete
-```
 
 ### storage.get(key, [fn])
 
@@ -111,7 +104,7 @@ storage.set({
 
 ### storage.development
 
-  Work with async storage in developer console can be unpleasant.
+  Work with async code console can be unpleasant.
   Setup development flag and storage will console.log() results of `get` or `count`.
 
 ```js
@@ -138,7 +131,3 @@ storage.forage.keys().then(function(keys) {
   console.log(keys);
 });
 ```
-
-## License
-
-  Aleksey Kulikov, [MIT](http://alekseykulikov.mit-license.org/).
